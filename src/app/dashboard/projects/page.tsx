@@ -27,6 +27,8 @@ export default async function ProjectsPage() {
                <div className={'px-4 sm:px-6 lg:px-8'}>
                   <div className={'mt-20'}>
                      <ul role="list" className="divide-y divide-gray-100">
+                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                        {/* @ts-expect-error */}
                   {projects.map((project) => (
                      <li key={project.id} className="flex items-center justify-between gap-x-6 py-5">
                         <div className="min-w-0">

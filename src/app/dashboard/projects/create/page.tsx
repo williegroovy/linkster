@@ -1,6 +1,6 @@
 import { getServerAuthSession } from '~/server/auth';
 import ProjectForm from '~/app/dashboard/projects/create/ProjectForm';
-import ContractorForm from '~/app/dashboard/projects/create/ContractorForm';
+import ContractorForm from '~/components/ContractorForm';
 import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
 

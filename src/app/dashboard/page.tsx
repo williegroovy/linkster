@@ -1,4 +1,4 @@
-import ProfileCreation from '../../components/ProfileCreation';
+import ProfileCreation from '~/components/ProfileCreation';
 import { getServerAuthSession } from '~/server/auth';
 
 export default async function DashboardPage() {
