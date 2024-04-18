@@ -1,7 +1,7 @@
 import { api } from '~/trpc/server';
-import LineItems from '../LineItems';
-import ProjectHeader from '~/app/dashboard/projects/[projectId]/ProjectHeader';
-import Calendar from '~/app/dashboard/projects/[projectId]/Calendar';
+import LineItems from '../../../../../components/Project/LineItems';
+import ProjectHeader from '~/components/Project/ProjectHeader';
+import Calendar from '~/components/Project/Calendar';
 import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
 

@@ -1,7 +1,7 @@
 import { api } from '~/trpc/server';
 import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
-import TradeForm from '~/app/dashboard/projects/[projectId]/trades/TradeForm';
+import TradeForm from '~/components/TradeForm';
 import ComboBox from '~/components/ComboBox';
 
 

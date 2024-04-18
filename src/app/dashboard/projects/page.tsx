@@ -1,7 +1,7 @@
 import { PlusIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link';
 import { api } from '~/trpc/server';
-import ProjectMenu from '~/app/dashboard/projects/ProjectMenu';
+import ProjectMenu from '~/components/ProjectMenu';
 import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
 

@@ -1,9 +1,9 @@
 import { api } from '~/trpc/server';
-import ProjectHeader from '~/app/dashboard/projects/[projectId]/ProjectHeader';
-import Calendar from '~/app/dashboard/projects/[projectId]/Calendar';
+import ProjectHeader from '~/components/Project/ProjectHeader';
+import Calendar from '~/components/Project/Calendar';
 import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
-import TradeItems from './TradeItems';
+import TradeItems from '../../../../components/Project/TradeItems';
 import ComboBox from '~/components/ComboBox';
 
 export default async function ProjectPage({ params } : { params: { projectId: string } }) {

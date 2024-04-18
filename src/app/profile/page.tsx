@@ -1,4 +1,4 @@
-import SelectionCard from '~/app/profile/SelectionCard';
+import ProfileSelectionCard from '~/components/ProfileSelectionCard';
 const secondaryNavigation = [
    { name: 'Account', href: '#', current: true },
    { name: 'Notifications', href: '#', current: false },
@@ -35,7 +35,7 @@ export default function ProfilePage() {
                </nav>
       </header>
          <div className={'w-full flex justify-center'}>
-            <SelectionCard />
+            <ProfileSelectionCard />
          </div>
                {/* Settings forms */}
                <div className="divide-y divide-white/5">
