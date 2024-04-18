@@ -4,7 +4,6 @@ import { getServerAuthSession } from '~/server/auth';
 export default async function DashboardPage() {
    const serverSession = await getServerAuthSession();
 
-   console.log(serverSession?.user?.profile)
    if(!serverSession?.user?.profile) {
       return (
          <ProfileCreation />
