@@ -35,7 +35,6 @@ type Address {
 model Trade {
   id               String           @id @default(auto()) @map("_id") @db.ObjectId
   name             String           @unique
-  Project          Project[]
   projectLineItems TradeLineItems[]
 
   @@map("trades")
@@ -44,9 +43,9 @@ model Trade {
 model TradeLineItems {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
   projectId String  @db.ObjectId
-  project   Project @relation(fields: [projectId], references: [id])
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tradeId   String  @db.ObjectId
-  trade     Trade   @relation(fields: [tradeId], references: [id])
+  trade     Trade   @relation(fields: [tradeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Project {
@@ -60,7 +59,7 @@ model Project {
   createdAt DateTime         @default(now())
   updatedAt DateTime?
 
-  contractor   Contractor @relation("contractor", fields: [contractorId], references: [id])
+  contractor   Contractor @relation("contractor", fields: [contractorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   contractorId String     @db.ObjectId
 
   subContractos    Contractor[] @relation("subContractors", fields: [subContractorIds], references: [id])
@@ -68,8 +67,6 @@ model Project {
 
   clientProfile Client? @relation(fields: [clientId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   clientId      String? @db.ObjectId
-  Trade         Trade?  @relation(fields: [tradeId], references: [id])
-  tradeId       String? @db.ObjectId
 
   @@map("projects")
 }
@@ -79,7 +76,7 @@ model Client {
   companyName String
 
   projects  Project[]
-  profile   Profile?  @relation(fields: [profileId], references: [id])
+  profile   Profile?  @relation(fields: [profileId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   profileId String?   @unique @db.ObjectId
 
   @@map("clients")
@@ -109,6 +106,8 @@ model Profile {
   contractorProfile Contractor?
   user              User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId            String      @unique @db.ObjectId
+
+  onboarded Boolean @default(false)
 
   @@map("profiles")
 }

@@ -17,7 +17,7 @@ export default function ProjectForm() {
    const router = useRouter();
    const createProject = api.projects.create.useMutation({
       onSuccess: () => {
-         router.back();
+         router.push('/dashboard/projects');
       }
    });
 

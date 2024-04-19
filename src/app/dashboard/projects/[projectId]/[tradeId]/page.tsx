@@ -11,8 +11,6 @@ export default async function ProjectPage({ params } : { params: { projectId: st
 
    const lineItem = await api.trades.listLineItems({ projectId: params.projectId });
 
-   console.log('lineItem', lineItem);
-
    return project && (
       <>
          <DarkNavHeader title={'Trade Line Items'} />

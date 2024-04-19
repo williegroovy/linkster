@@ -4,6 +4,8 @@ import { api } from '~/trpc/server';
 import ProjectMenu from '~/components/ProjectMenu';
 import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
+import { getServerAuthSession } from '~/server/auth';
+import { redirect } from 'next/navigation';
 
 export default async function ProjectsPage() {
    const projects = await api.projects.list();
@@ -27,8 +29,6 @@ export default async function ProjectsPage() {
                <div className={'px-4 sm:px-6 lg:px-8'}>
                   <div className={'mt-20'}>
                      <ul role="list" className="divide-y divide-gray-100">
-                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                        {/* @ts-expect-error */}
                   {projects.map((project) => (
                      <li key={project.id} className="flex items-center justify-between gap-x-6 py-5">
                         <div className="min-w-0">

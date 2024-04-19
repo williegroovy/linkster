@@ -12,21 +12,33 @@ type ContractorDetails = {
    state: string;
    postalCode: string;
 }
-export default function ContractorForm() {
+
+type ContractorProfile = {
+   companyName?: string;
+   address?: {
+      country?: string;
+      street?: string;
+      city?: string;
+      state?: string;
+      postalCode?: string;
+   }
+} | undefined;
+
+export default function ContractorForm({ contractorProfile } : { contractorProfile?: ContractorProfile }) {
    const router = useRouter();
    const createContractor = api.profiles.createContractor.useMutation({
       onSuccess: () => {
-         router.back();
+         router.push('/dashboard?step=3');
       }
    });
 
    const [contractorDetails, setContractorDetails] = useState<ContractorDetails>({
-      companyName: '',
-      country: 'United States',
-      street: '',
-      city: '',
-      state: '',
-      postalCode: ''
+      companyName: contractorProfile?.companyName || '',
+      country: contractorProfile?.address?.country || 'United States',
+      street: contractorProfile?.address?.street || '',
+      city: contractorProfile?.address?.city || '',
+      state: contractorProfile?.address?.state || '',
+      postalCode: contractorProfile?.address?.postalCode || ''
    });
 
    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -168,7 +180,7 @@ export default function ContractorForm() {
                onClick={handleSubmit}
                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-               Save
+               { contractorProfile ? 'Update': 'Save' }
             </button>
          </div>
       </form>

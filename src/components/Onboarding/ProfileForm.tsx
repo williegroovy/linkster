@@ -15,24 +15,43 @@ type FormData = {
    postalCode: string
 }
 
-export default function ProfileForm() {
+type Profile = {
+   id: string;
+   firstName?: string
+   lastName?: string
+   address?: {
+      country?: string
+      street?: string
+      city?: string
+      state?: string
+      postalCode?: string
+   }
+} | undefined;
+
+export default function ProfileForm({ profile, email } : { profile: Profile, email: string | undefined }) {
    const router = useRouter();
 
    const createProfile = api.profiles.create.useMutation({
       onSuccess: () => {
-         router.refresh();
+         router.push('/dashboard?step=2');
+      }
+   });
+
+   const updateProfile = api.profiles.update.useMutation({
+      onSuccess: () => {
+         router.push('/dashboard?step=2');
       }
    });
 
    const [formData, setFormData] = useState<FormData>({
-      firstName: '',
-      lastName: '',
-      email: '',
-      country: 'United States',
-      street: '',
-      city: '',
-      state: '',
-      postalCode: '',
+      firstName: profile?.firstName || '',
+      lastName: profile?.lastName || '',
+      email: email || '',
+      country: profile?.address?.country || 'United States',
+      street: profile?.address?.street || '',
+      city: profile?.address?.city || '',
+      state: profile?.address?.state || '',
+      postalCode: profile?.address?.postalCode || '',
    });
 
    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -43,7 +62,11 @@ export default function ProfileForm() {
    };
 
    const handleSubmit = async () => {
-      await createProfile.mutateAsync(formData);
+      if(profile) {
+         await updateProfile.mutateAsync({ id: profile.id, ...formData });
+      } else {
+         await createProfile.mutateAsync(formData);
+      }
    }
 
    return (
@@ -205,7 +228,7 @@ export default function ProfileForm() {
                onClick={handleSubmit}
                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-               Save
+               { profile ? 'Update' : 'Save' }
             </button>
          </div>
       </form>

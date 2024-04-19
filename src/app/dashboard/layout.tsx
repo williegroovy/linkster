@@ -2,7 +2,6 @@ import '~/styles/globals.css'
 import { redirect } from 'next/navigation';
 import { type Metadata } from 'next'
 import { getServerAuthSession } from '~/server/auth';
-import SideBarContainer from '~/components/SideBarContainer';
 import DarkNav from '~/components/DarkNav';
 
 export const metadata: Metadata = {
@@ -29,15 +28,18 @@ export default async function DashboardLayout({
    //    redirect('/profile');
    // }
 
-   if(!serverSession?.user?.profile) {
+   console.log('d-layout serverSession', serverSession?.user)
+
+   if(!serverSession?.user?.profile || !serverSession?.user?.profile?.onboarded) {
       return (
          <main className="py-8">
             <div className="px-4 sm:px-4 lg:px-8">{children}</div>
          </main>
       )
    }
+
    return (
-      <DarkNav>
+      <DarkNav user={serverSession.user}>
          {children}
       </DarkNav>
    )

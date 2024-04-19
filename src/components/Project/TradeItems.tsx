@@ -57,15 +57,13 @@ function classNames(...classes: Array<string | undefined | boolean>) {
    return classes.filter(Boolean).join(' ')
 }
 
-export default function TradeItems({ trades, projectId } : { trades: Array<{ id: string, trade: { id: string, trade: { id: string, name: string } } }>, projectId: string }) {
+export default function TradeItems({ trades, projectId } : { trades: Array<{ id: string, trade: { id: string, name: string } }>, projectId: string }) {
    return (
       <ul role="list" className="mb-10 divide-y divide-gray-100">
          {trades.map(({ id, trade }) => (
             <li key={trade.id} className="flex items-center justify-between gap-x-6 py-5">
                <div className="min-w-0">
                   <div className="flex items-start gap-x-3">
-                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                     { /* @ts-expect-error */ }
                      <p className="text-sm font-semibold leading-6 text-gray-900">{trade.name}</p>
                      <p
                         className={classNames(
@@ -90,12 +88,8 @@ export default function TradeItems({ trades, projectId } : { trades: Array<{ id:
                      href={`/dashboard/projects/${projectId}/${id}`}
                      className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
                   >
-                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                     { /* @ts-expect-error */ }
                      View trade<span className="sr-only">, {trade.name}</span>
                   </a>
-                  {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                  { /* @ts-expect-error */ }
                   <DropdownMenu id={id} trade={trade} projectId={projectId} />
                </div>
             </li>

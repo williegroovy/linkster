@@ -3,18 +3,11 @@ import { Fragment, type ReactNode } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
-const user = {
-   name: 'Tom Cook',
-   email: 'tom@example.com',
-   imageUrl:
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
 const navigation = [
    { name: 'Dashboard', href: '/dashboard', current: true },
    { name: 'Team', href: '/dashboard/teams', current: false },
    { name: 'Projects', href: '/dashboard/projects', current: false },
-   { name: 'Calendar', href: '#', current: false },
-   { name: 'Reports', href: '#', current: false },
+   { name: 'Calendar', href: '/dashboard/calendar', current: false },
 ]
 const userNavigation = [
    { name: 'Your Profile', href: '#' },
@@ -22,11 +15,17 @@ const userNavigation = [
    { name: 'Sign out', href: '#' },
 ]
 
+type User = {
+   name: string,
+   email: string,
+   image?: string,
+}
+
 function classNames(...classes: Array<string | boolean | undefined>) {
    return classes.filter(Boolean).join(' ')
 }
 
-export default function DarkNav({ children } : { children: ReactNode }) {
+export default function DarkNav({ children, user } : { children: ReactNode, user: User }) {
    return (
       <div className="min-h-full">
          <Disclosure as="nav" className="bg-gray-800">
@@ -81,7 +80,7 @@ export default function DarkNav({ children } : { children: ReactNode }) {
                                     <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                        <span className="absolute -inset-1.5" />
                                        <span className="sr-only">Open user menu</span>
-                                       <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                                       <img className="h-8 w-8 rounded-full" src={user?.image} alt="" referrerPolicy="no-referrer" />
                                     </Menu.Button>
                                  </div>
                                  <Transition
@@ -149,7 +148,7 @@ export default function DarkNav({ children } : { children: ReactNode }) {
                      <div className="border-t border-gray-700 pb-3 pt-4">
                         <div className="flex items-center px-5">
                            <div className="flex-shrink-0">
-                              <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                              <img className="h-10 w-10 rounded-full" src={user.image} alt="" referrerPolicy="no-referrer" />
                            </div>
                            <div className="ml-3">
                               <div className="text-base font-medium text-white">{user.name}</div>

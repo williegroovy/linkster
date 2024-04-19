@@ -9,8 +9,6 @@ export default async function ProjectPage({ params } : { params: { projectId: st
    const project = await api.projects.get({ projectId: params.projectId });
    const trades = await api.trades.list();
 
-   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment
-   // @ts-expect-error
    const selected = project?.trades.map(({ trade }) => trade) ?? []
 
 

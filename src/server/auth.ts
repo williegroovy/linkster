@@ -32,6 +32,7 @@ declare module "next-auth" {
           state: string;
           zip: string;
         };
+        onboarded: boolean;
         contractorProfile: {
           id: string;
           companyName: string;
@@ -65,6 +66,7 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     session: async ({ session, user }) => {
+      console.log('user', user);
       const profile = await db.profile.findUnique({
          where: {
           userId: user.id,

@@ -1,0 +1,29 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+import { api } from '~/trpc/react';
+
+export default function NewProjectButton() {
+   const router = useRouter();
+
+   const setOnboarded = api.profiles.setOnboarded.useMutation({
+      onSuccess: () => {
+         router.push('/dashboard/projects/create');
+         router.refresh();
+      }
+   });
+
+   const onClick = async () => {
+      await setOnboarded.mutateAsync(undefined);
+   }
+
+   return (
+      <button
+         onClick={onClick}
+         type="button"
+         className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      >
+         Create Project
+      </button>
+   )
+}
