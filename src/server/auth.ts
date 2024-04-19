@@ -39,6 +39,17 @@ declare module "next-auth" {
           projects: Array<object>;
           subContractedProjects: Array<object>;
           profile: object;
+          trades: Array<{
+            id: string;
+            name: string;
+          }>;
+          serviceAreas: Array<{
+            id: string;
+            name: string;
+            city: string;
+            state: string;
+            zip: string;
+          }>
         }
         clientProfile: {
           id: string;
@@ -72,7 +83,12 @@ export const authOptions: NextAuthOptions = {
           userId: user.id,
         },
         include: {
-          contractorProfile: true,
+          contractorProfile: {
+            include: {
+              serviceAreas: true,
+              trades: true,
+            }
+          },
           clientProfile: true,
         }
       });

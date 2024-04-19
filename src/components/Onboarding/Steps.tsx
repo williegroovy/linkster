@@ -1,9 +1,9 @@
 import { CheckIcon } from '@heroicons/react/24/solid'
 
 const steps = [
-   { id: 1, name: 'Personal Information', href: '/dashboard?step=1', status: 'complete' },
-   { id: 2, name: 'Contractor Information', href: '/dashboard?step=2', status: 'current' },
-   { id: 3, name: 'Project', href: '/dashboard?step=3', status: 'upcoming' },
+   { id: 1, name: 'Personal Information', href: '/dashboard?step=1' },
+   { id: 2, name: 'Contractor Information', href: '/dashboard?step=2' },
+   { id: 3, name: 'Service Areas', href: '/dashboard?step=3' },
 ]
 
 export default function Steps({ currentStep }: { currentStep: number }) {

@@ -3,7 +3,7 @@ import { getServerAuthSession } from '~/server/auth';
 import Steps from '~/components/Onboarding/Steps';
 import { redirect } from 'next/navigation';
 import ContractorProfileCreation from '~/components/Onboarding/ContractorProfileCreation';
-import ProjectCreationForm from '~/components/Onboarding/ProjectCreation';
+import ServiceAreaCreation from '~/components/Onboarding/ServiceAreaCreation';
 
 export default async function DashboardPage({ searchParams } : { searchParams: { step: string } }) {
    const serverSession = await getServerAuthSession();
@@ -25,7 +25,7 @@ export default async function DashboardPage({ searchParams } : { searchParams: {
             <Steps currentStep={currentStep} />
             { currentStep === 1 && <ProfileCreation /> }
             { currentStep === 2 && <ContractorProfileCreation /> }
-            { currentStep === 3 && <ProjectCreationForm /> }
+            { currentStep === 3 && <ServiceAreaCreation /> }
          </>
       )
    }

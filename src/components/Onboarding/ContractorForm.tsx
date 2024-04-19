@@ -7,10 +7,10 @@ import { api } from '~/trpc/react';
 type ContractorDetails = {
    companyName: string;
    country: string;
-   street: string;
-   city: string;
-   state: string;
-   postalCode: string;
+   street: string | undefined
+   city: string | undefined;
+   state: string | undefined;
+   postalCode: string | undefined
 }
 
 type ContractorProfile = {
@@ -35,10 +35,10 @@ export default function ContractorForm({ contractorProfile } : { contractorProfi
    const [contractorDetails, setContractorDetails] = useState<ContractorDetails>({
       companyName: contractorProfile?.companyName || '',
       country: contractorProfile?.address?.country || 'United States',
-      street: contractorProfile?.address?.street || '',
-      city: contractorProfile?.address?.city || '',
-      state: contractorProfile?.address?.state || '',
-      postalCode: contractorProfile?.address?.postalCode || ''
+      street: contractorProfile?.address?.street,
+      city: contractorProfile?.address?.city,
+      state: contractorProfile?.address?.state,
+      postalCode: contractorProfile?.address?.postalCode
    });
 
    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -58,10 +58,10 @@ export default function ContractorForm({ contractorProfile } : { contractorProfi
             <div className="border-b border-gray-900/10 pb-12">
                <h2 className="text-base font-semibold leading-7 text-gray-900">Company Information</h2>
 
-               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-5">
+               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                   <div className="sm:col-span-3">
                      <label htmlFor="companyName" className="block text-sm font-medium leading-6 text-gray-900">
-                        Company Name
+                        Company Name <span className={'text-xs'}>(or personal name)</span>
                      </label>
                      <div className="mt-2">
                         <input
@@ -76,24 +76,10 @@ export default function ContractorForm({ contractorProfile } : { contractorProfi
                      </div>
                   </div>
 
-                  <div className="sm:col-span-4">
-                     <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
-                        Country
-                     </label>
-                     <div className="mt-2">
-                        <select
-                           onChange={handleChange}
-                           value={contractorDetails.country}
-                           id="country"
-                           name="country"
-                           autoComplete="country-name"
-                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                        >
-                           <option>United States</option>
-                           <option>Canada</option>
-                           <option>Mexico</option>
-                        </select>
-                     </div>
+                  <div className="col-span-full">
+                     <h3 className="text-md font-semibold leading-7 text-gray-900">
+                        Address <span className={'text-xs'}>(optional)</span>
+                     </h3>
                   </div>
 
                   <div className="col-span-full">
@@ -161,6 +147,26 @@ export default function ContractorForm({ contractorProfile } : { contractorProfi
                            autoComplete="postal-code"
                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
+                     </div>
+                  </div>
+
+                  <div className="sm:col-span-2">
+                     <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
+                        Country
+                     </label>
+                     <div className="mt-2">
+                        <select
+                           onChange={handleChange}
+                           value={contractorDetails.country}
+                           id="country"
+                           name="country"
+                           autoComplete="country-name"
+                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                        >
+                           <option>United States</option>
+                           <option>Canada</option>
+                           <option>Mexico</option>
+                        </select>
                      </div>
                   </div>
                </div>

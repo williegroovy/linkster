@@ -32,10 +32,20 @@ type Address {
   country    String
 }
 
+type Location {
+  city       String
+  state      String
+  postalCode String
+  country    String
+}
+
 model Trade {
   id               String           @id @default(auto()) @map("_id") @db.ObjectId
   name             String           @unique
   projectLineItems TradeLineItems[]
+
+  contractorIds String[]     @db.ObjectId
+  contractors   Contractor[] @relation(fields: [contractorIds], references: [id])
 
   @@map("trades")
 }
@@ -82,6 +92,18 @@ model Client {
   @@map("clients")
 }
 
+model ServiceArea {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  location     Location
+  serviceRange Int?
+
+  contractorIds String[]     @db.ObjectId
+  contractors   Contractor[] @relation(fields: [contractorIds], references: [id])
+
+  @@map("service_areas")
+}
+
 model Contractor {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   companyName String
@@ -93,6 +115,12 @@ model Contractor {
 
   profile   Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   profileId String?  @unique @db.ObjectId
+
+  serviceAreaIds String[]      @db.ObjectId
+  serviceAreas   ServiceArea[] @relation(fields: [serviceAreaIds], references: [id])
+
+  tradeIds String[] @db.ObjectId
+  trades   Trade[]  @relation(fields: [tradeIds], references: [id])
 
   @@map("contractors")
 }
