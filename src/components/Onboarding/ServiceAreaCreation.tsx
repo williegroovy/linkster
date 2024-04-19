@@ -18,7 +18,7 @@ export default async function ContractorProfileCreation() {
             Let&apos;s set up your service area(s) and trades for projects
          </p>
          <div className="mx-auto mt-2 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-10 sm:gap-y-0 lg:max-w-4xl">
-            <ServiceAreaForm trades={trades} contractorProfile={serverSession?.user?.profile?.contractorProfile}/>
+            <ServiceAreaForm tradesList={trades} contractorProfile={serverSession?.user?.profile?.contractorProfile}/>
          </div>
       </div>
    )

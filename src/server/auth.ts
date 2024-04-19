@@ -30,7 +30,7 @@ declare module "next-auth" {
           street: string;
           city: string;
           state: string;
-          zip: string;
+          postalCode: string;
         };
         onboarded: boolean;
         contractorProfile: {
@@ -48,7 +48,7 @@ declare module "next-auth" {
             name: string;
             city: string;
             state: string;
-            zip: string;
+            postalCode: string;
           }>
         }
         clientProfile: {
@@ -77,7 +77,6 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     session: async ({ session, user }) => {
-      console.log('user', user);
       const profile = await db.profile.findUnique({
          where: {
           userId: user.id,

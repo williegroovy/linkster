@@ -176,4 +176,38 @@ export const profilesRouter = createTRPCRouter({
          }
       });
    }),
+   addServiceAreas: protectedProcedure
+      .input(z.object({
+         serviceAreas: z.array(
+            z.object({
+               name: z.string().min(1),
+               serviceRange: z.string().min(1),
+               city: z.string().min(1),
+               state: z.string().min(1),
+               postalCode: z.string().min(1),
+               country: z.string().min(1)
+            }))
+      }))
+      .mutation(async ({ ctx, input }) => {
+         console.log('serviceAreas', input.serviceAreas);
+         return Promise.allSettled(input.serviceAreas.map(async (serviceArea) => {
+            return ctx.db.serviceArea.create({
+               data: {
+                  name: serviceArea.name,
+                  serviceRange: parseInt(serviceArea.serviceRange),
+                  location: {
+                     city: serviceArea.city,
+                     state: serviceArea.state,
+                     postalCode: serviceArea.postalCode,
+                     country: serviceArea.country,
+                  },
+                  contractors: {
+                     connect: {
+                        id: ctx.session.user.profile.contractorProfile.id
+                     }
+                  },
+               }
+            });
+         }))
+      }),
 });
