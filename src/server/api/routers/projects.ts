@@ -29,7 +29,7 @@ export const projectsRouter = createTRPCRouter({
              postalCode: input.postalCode,
              country: input.country,
           },
-          contractor: { connect: { id: ctx.session.user.profile?.contractorProfile?.id } },
+          contractor: { connect: { id: ctx.session.user.profile.contractorProfile.id } },
         },
       });
     }),

@@ -33,7 +33,6 @@ export default function ProjectForm() {
    });
 
    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      console.log('e', e.target.name, e.target.value);
       setProjectDetails({
          ...projectDetails,
          [e.target.name]: e.target.value

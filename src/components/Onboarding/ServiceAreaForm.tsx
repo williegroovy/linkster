@@ -18,7 +18,12 @@ type ContractorProfile = {
    }
    trades: Array<{
       id: string;
-      name: string;
+      tradeId: string;
+      contractorId: string;
+      trade: {
+         id: string;
+         name: string;
+      }
    }>;
    serviceAreas: Array<{
       id: string;
@@ -96,11 +101,13 @@ export default function ContractorForm({ contractorProfile, tradesList } : { con
       await addServiceArea.mutateAsync({ serviceAreas: serviceAreaDetails });
    }
 
+   const flatTrades = contractorProfile?.trades?.map(trade => ({ ...trade.trade, contractorTradeId: trade.id })) || [];
+
    return (
       <form>
-         <ComboBox listItems={tradesList} selected={contractorProfile?.trades} />
+         <ComboBox listItems={tradesList} selected={flatTrades} />
          <h2 className="text-base font-semibold leading-7 text-gray-900">Trade(s)</h2>
-         <Badges list={contractorProfile?.trades} />
+         <Badges list={flatTrades} />
 
          <div className="mt-10 space-y-12">
             <div className="border-b border-gray-900/10 pb-12">

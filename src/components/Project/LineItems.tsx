@@ -1,5 +1,65 @@
 import { ChatBubbleLeftIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
 
+const activity = [
+   { id: 1, type: 'created', person: { name: 'Chelsea Hagon' }, date: '7d ago', dateTime: '2023-01-23T10:32' },
+   { id: 2, type: 'edited', person: { name: 'Chelsea Hagon' }, date: '6d ago', dateTime: '2023-01-23T11:03' },
+   { id: 3, type: 'sent', person: { name: 'Chelsea Hagon' }, date: '6d ago', dateTime: '2023-01-23T11:24' },
+   {
+      id: 4,
+      type: 'commented',
+      person: {
+         name: 'Chelsea Hagon',
+         imageUrl:
+            'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+      },
+      comment: 'Called client, they reassured me the invoice would be paid by the 25th.',
+      date: '3d ago',
+      dateTime: '2023-01-23T15:56',
+   },
+   { id: 5, type: 'viewed', person: { name: 'Alex Curren' }, date: '2d ago', dateTime: '2023-01-24T09:12' },
+   { id: 6, type: 'paid', person: { name: 'Alex Curren' }, date: '1d ago', dateTime: '2023-01-24T09:20' },
+]
+
+const activity2 = [
+   {
+      id: 1,
+      type: 'comment',
+      person: { name: 'Eduardo Benz', href: '#' },
+      imageUrl:
+         'https://images.unsplash.com/photo-1520785643438-5bf77931f493?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
+      comment:
+         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tincidunt nunc ipsum tempor purus vitae id. Morbi in vestibulum nec varius. Et diam cursus quis sed purus nam. ',
+      date: '6d ago',
+   },
+   {
+      id: 2,
+      type: 'assignment',
+      person: { name: 'Hilary Mahy', href: '#' },
+      assigned: { name: 'Kristin Watson', href: '#' },
+      date: '2d ago',
+   },
+   {
+      id: 3,
+      type: 'tags',
+      person: { name: 'Hilary Mahy', href: '#' },
+      tags: [
+         { name: 'Bug', href: '#', color: 'fill-red-500' },
+         { name: 'Accessibility', href: '#', color: 'fill-indigo-500' },
+      ],
+      date: '6h ago',
+   },
+   {
+      id: 4,
+      type: 'comment',
+      person: { name: 'Jason Meyers', href: '#' },
+      imageUrl:
+         'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
+      comment:
+         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tincidunt nunc ipsum tempor purus vitae id. Morbi in vestibulum nec varius. Et diam cursus quis sed purus nam. Scelerisque amet elit non sit ut tincidunt condimentum. Nisl ultrices eu venenatis diam.',
+      date: '2h ago',
+   },
+]
+
 const discussions = [
    {
       id: 1,

@@ -119,12 +119,14 @@ export const profilesRouter = createTRPCRouter({
    addTrade: protectedProcedure
       .input(z.object({ id: z.string().min(1) }))
       .mutation(async ({ input, ctx }) => {
-         return ctx.db.contractor.update({
-            where: {
-               id: ctx.session.user.profile.contractorProfile.id,
-            },
+         return ctx.db.contractorTrade.create({
             data: {
-               trades: {
+               contractor: {
+                  connect: {
+                     id: ctx.session.user.profile.contractorProfile.id,
+                  },
+               },
+               trade: {
                   connect: {
                      id: input.id,
                   },
@@ -135,16 +137,9 @@ export const profilesRouter = createTRPCRouter({
    removeTrade: protectedProcedure
       .input(z.object({ id: z.string().min(1) }))
       .mutation(async ({ input, ctx }) => {
-         return ctx.db.contractor.update({
+         return ctx.db.contractorTrade.delete({
             where: {
-               id: ctx.session.user.profile.contractorProfile.id,
-            },
-            data: {
-               trades: {
-                  disconnect: {
-                     id: input.id,
-                  },
-               },
+               id: input.id
             },
          });
       }),
@@ -189,7 +184,6 @@ export const profilesRouter = createTRPCRouter({
             }))
       }))
       .mutation(async ({ ctx, input }) => {
-         console.log('serviceAreas', input.serviceAreas);
          return Promise.allSettled(input.serviceAreas.map(async (serviceArea) => {
             return ctx.db.serviceArea.create({
                data: {

@@ -41,7 +41,12 @@ declare module "next-auth" {
           profile: object;
           trades: Array<{
             id: string;
-            name: string;
+            tradeId: string;
+            contractorId: string;
+            trade: {
+              id: string;
+              name: string;
+            }
           }>;
           serviceAreas: Array<{
             id: string;
@@ -85,7 +90,11 @@ export const authOptions: NextAuthOptions = {
           contractorProfile: {
             include: {
               serviceAreas: true,
-              trades: true,
+              trades: {
+                include: {
+                  trade: true
+                }
+              },
             }
           },
           clientProfile: true,

@@ -11,6 +11,7 @@ export default async function ProjectPage({ params } : { params: { projectId: st
 
    const lineItem = await api.trades.listLineItems({ projectId: params.projectId });
 
+   console.log('lineItem', lineItem);
    return project && (
       <>
          <DarkNavHeader title={'Trade Line Items'} />
@@ -19,7 +20,6 @@ export default async function ProjectPage({ params } : { params: { projectId: st
                <ProjectHeader project={project} />
                <div className={'mt-10'}>
                   <LineItems />
-                  <Calendar />
                </div>
             </div>
          </DarkNavContainer>

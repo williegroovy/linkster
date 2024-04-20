@@ -35,6 +35,7 @@ export default function ComboBox({ listItems, selected }: { listItems: ListItems
    const removeTrade = api.profiles.removeTrade.useMutation(
       {
          onSuccess: () => {
+            setSelectedItems([]);
             router.refresh();
          }
       }
@@ -57,9 +58,6 @@ export default function ComboBox({ listItems, selected }: { listItems: ListItems
 
    const handleOnKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
       if(e.key === 'Enter') {
-         console.log('query', query);
-
-         console.log('filteredListItems', filteredListItems);
          if(filteredListItems.length === 0) {
             console.log('key down enter', e.currentTarget.value);
             const tradeLineItem = await createTrade.mutateAsync({ name: query });
@@ -71,10 +69,6 @@ export default function ComboBox({ listItems, selected }: { listItems: ListItems
    }
 
    const handleOnChange = async (newListItems: ListItems) => {
-      console.log('onChange', newListItems);
-      // console.log('last', listItem.pop());
-      // const newItem = listItem.pop();
-
       setSelectedItems(newListItems);
 
       const add = newListItems?.filter((listItem) => {
@@ -85,12 +79,8 @@ export default function ComboBox({ listItems, selected }: { listItems: ListItems
          return !newListItems?.includes(listItem);
       });
 
-      console.log('add', add);
-      console.log('remove', remove);
-
-
       if(add && add.length > 0 && add[0]?.id) {
-         const trade = await addTrade.mutateAsync({ id: add[0].id });
+         await addTrade.mutateAsync({ id: add[0].id });
 
       }
 

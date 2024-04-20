@@ -10,9 +10,9 @@ const navigation = [
    { name: 'Calendar', href: '/dashboard/calendar', current: false },
 ]
 const userNavigation = [
-   { name: 'Your Profile', href: '#' },
-   { name: 'Settings', href: '#' },
-   { name: 'Sign out', href: '#' },
+   { name: 'Your Profile', href: '/profile' },
+   { name: 'Settings', href: '/settings' },
+   { name: 'Sign out', href: '/signout' },
 ]
 
 type User = {
