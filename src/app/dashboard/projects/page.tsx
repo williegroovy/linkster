@@ -4,14 +4,10 @@ import { api } from '~/trpc/server';
 import ProjectMenu from '~/components/ProjectMenu';
 import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
-import { getServerAuthSession } from '~/server/auth';
-import { redirect } from 'next/navigation';
 
 export default async function ProjectsPage() {
    const projects = await api.projects.list();
    const contractor = await api.projects.listSubcontractorProjects();
-
-   console.log('subcontractedProjects', contractor?.subContractedProjects);
 
    return (
       <>
@@ -64,6 +60,7 @@ export default async function ProjectsPage() {
                      </ul>
                   </div>
                   <div className={'mt-20'}>
+                     <h2>SubContracted Projects</h2>
                      <ul role="list" className="divide-y divide-gray-100">
                         {contractor && contractor?.subContractedProjects?.map((subProjects) => (
                            <li key={subProjects.project.id} className="flex items-center justify-between gap-x-6 py-5">
