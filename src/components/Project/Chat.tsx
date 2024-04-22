@@ -13,26 +13,6 @@ import {
 import { Listbox, Transition } from '@headlessui/react'
 import { api } from '~/trpc/react';
 
-const activity = [
-   { id: 1, type: 'created', person: { name: 'Chelsea Hagon' }, date: '7d ago', dateTime: '2023-01-23T10:32' },
-   { id: 2, type: 'edited', person: { name: 'Chelsea Hagon' }, date: '6d ago', dateTime: '2023-01-23T11:03' },
-   { id: 3, type: 'sent', person: { name: 'Chelsea Hagon' }, date: '6d ago', dateTime: '2023-01-23T11:24' },
-   {
-      id: 4,
-      type: 'commented',
-      person: {
-         name: 'Chelsea Hagon',
-         imageUrl:
-            'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-      },
-      comment: 'Called client, they reassured me the invoice would be paid by the 25th.',
-      date: '3d ago',
-      dateTime: '2023-01-23T15:56',
-   },
-   { id: 5, type: 'viewed', person: { name: 'Alex Curren' }, date: '2d ago', dateTime: '2023-01-24T09:12' },
-   { id: 6, type: 'paid', person: { name: 'Alex Curren' }, date: '1d ago', dateTime: '2023-01-24T09:20' },
-]
-
 const moods = [
    { name: 'Excited', value: 'excited', icon: FireIcon, iconColor: 'text-white', bgColor: 'bg-red-500' },
    { name: 'Loved', value: 'loved', icon: HeartIcon, iconColor: 'text-white', bgColor: 'bg-pink-400' },
@@ -70,10 +50,10 @@ type Chat = {
    }>
 }
 
-export default function Chat({ chatId } : { chatId: string }) {
+export default function Chat({ chatId, image, initials } : { chatId: string, image?: string, initials?: string }) {
    const [selected, setSelected] = useState(moods[5]);
 
-   const { data: chat, refetch } = api.projects.getChat.useQuery({ chatId });
+   const { data: chat, refetch } = api.projects.getChat.useQuery({ chatId }, { refetchInterval: 1000, refetchIntervalInBackground: true });
    const sendChat = api.projects.sendChat.useMutation({
       onSuccess: () => {
          refetch();
@@ -82,19 +62,19 @@ export default function Chat({ chatId } : { chatId: string }) {
 
    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      console.log('e', e.currentTarget);
       const comment = e.currentTarget.comment.value;
-      console.log('comment', comment);
       await sendChat.mutateAsync({ chatId, content: comment });
+      e.currentTarget.comment.value = '';
    }
-   return (
+
+   return chat && (
       <>
          <ul role="list" className="space-y-6">
             {chat?.activity.map((activityItem, activityItemIdx) => (
                <li key={activityItem.id} className="relative flex gap-x-4">
                   <div
                      className={classNames(
-                        activityItemIdx === activity.length - 1 ? 'h-6' : '-bottom-6',
+                        activityItemIdx === chat.activity.length - 1 ? 'h-6' : '-bottom-6',
                         'absolute left-0 top-0 flex w-6 justify-center'
                      )}
                   >
@@ -148,11 +128,16 @@ export default function Chat({ chatId } : { chatId: string }) {
 
          {/* New comment form */}
          <div className="mt-6 flex gap-x-3">
-            <img
-               src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-               alt=""
-               className="h-6 w-6 flex-none rounded-full bg-gray-50"
-            />
+            { image ?
+               <img
+                  src={image}
+                  alt=""
+                  className="h-6 w-6 flex-none rounded-full bg-gray-50"
+               />
+               : <div className="h-6 w-6 flex-none rounded-full bg-gray-50">
+                  { initials ?? '' }
+               </div>
+            }
             <form onSubmit={handleSubmit} className="relative flex-auto">
                <div className="overflow-hidden rounded-lg pb-12 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
                   <label htmlFor="comment" className="sr-only">

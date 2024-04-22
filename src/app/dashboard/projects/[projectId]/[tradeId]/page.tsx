@@ -1,19 +1,17 @@
 import { api } from '~/trpc/server';
-import LineItems from '~/components/Project/LineItems';
 import ProjectHeader from '~/components/Project/ProjectHeader';
-import Calendar from '~/components/Project/Calendar';
 import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
 import Chat from '~/components/Project/Chat';
-import ContractorList from '~/components/Project/ContractorList';
+import { getServerAuthSession } from '~/server/auth';
 
 export default async function ProjectPage({ params } : { params: { projectId: string, tradeId: string } }) {
-
+   const serverSession = await getServerAuthSession();
    const project = await api.projects.get({ projectId: params.projectId });
 
-   const lineItems = await api.trades.listLineItems({ projectId: params.projectId });
+   // const lineItems = await api.trades.listLineItems({ projectId: params.projectId });
 
-   console.log('chat', project?.chats);
+   const initials = serverSession?.user.name.split(' ').map((n) => n[0]).join('');
    return project && (
       <>
          <DarkNavHeader title={'Trade Line Items'} />
@@ -23,7 +21,7 @@ export default async function ProjectPage({ params } : { params: { projectId: st
                <div className={'mt-10'}>
                   {/*<LineItems lineItems={lineItems} />*/}
                </div>
-               { project?.chats[0] && <Chat chatId={project.chats[0].id} /> }
+               { project.chats.length > 0 && project?.chats[0] && <Chat image={serverSession?.user?.image} chatId={project.chats[0].id} initials={initials} /> }
             </div>
          </DarkNavContainer>
       </>

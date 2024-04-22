@@ -9,9 +9,6 @@ export default async function ProjectsPage() {
    const projects = await api.projects.list();
    const contractor = await api.projects.listSubcontractorProjects();
 
-   console.log('projects', projects);
-   console.log('contractor', contractor);
-
    return (
       <>
          <DarkNavHeader title={'Projects'}>

@@ -20,8 +20,6 @@ export default async function ProjectPage({ params } : { params: { projectId: st
 
    const selectedSubs = project?.subContractors?.map(({ contractor }) => ({ id: contractor.id, profile: contractor.profile })) ?? []
 
-   console.log('isProjectOwner', isProjectOwner);
-
    return project && (
       <>
          <DarkNavHeader title={'Project Details'} />
@@ -31,7 +29,7 @@ export default async function ProjectPage({ params } : { params: { projectId: st
                <div className={'mt-10'}>
                   {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
                   { isProjectOwner && <ComboBox projectId={params.projectId} listItems={trades} selected={selected} /> }
-                  <TradeItems projectId={params.projectId} trades={project.trades} />
+                  <TradeItems projectId={params.projectId} trades={project.trades} isProjectOwner={isProjectOwner} />
                   {/*<Calendar />*/}
                   { isProjectOwner && <ContractorList projectId={params.projectId} contractors={contractors} selected={selectedSubs} /> }
                </div>

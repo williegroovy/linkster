@@ -117,4 +117,29 @@ export const teamRouter = createTRPCRouter({
          },
       });
    }),
+   listContractors: protectedProcedure.query(({ ctx }) => {
+      return ctx.db.contractor.findMany({
+         where: {
+            id: {
+               not: ctx.session.user.profile.contractorProfile.id,
+            }
+         },
+         select: {
+            id: true,
+            profile: {
+               select: {
+                  firstName: true,
+                  lastName: true,
+                  user: {
+                     select: {
+                        email: true,
+                        id: true,
+                        image: true,
+                     }
+                  }
+               }
+            },
+         }
+      });
+   }),
 });

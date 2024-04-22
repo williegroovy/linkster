@@ -57,7 +57,7 @@ function classNames(...classes: Array<string | undefined | boolean>) {
    return classes.filter(Boolean).join(' ')
 }
 
-export default function TradeItems({ trades, projectId } : { trades: Array<{ id: string, trade: { id: string, name: string } }>, projectId: string }) {
+export default function TradeItems({ trades, projectId, isProjectOwner } : { trades: Array<{ id: string, trade: { id: string, name: string } }>, projectId: string, isProjectOwner: boolean }) {
    return (
       <ul role="list" className="mb-10 divide-y divide-gray-100">
          {trades.map(({ id, trade }) => (
@@ -90,7 +90,7 @@ export default function TradeItems({ trades, projectId } : { trades: Array<{ id:
                   >
                      View trade<span className="sr-only">, {trade.name}</span>
                   </a>
-                  <DropdownMenu id={id} trade={trade} projectId={projectId} />
+                  { isProjectOwner && <DropdownMenu id={id} trade={trade} projectId={projectId} /> }
                </div>
             </li>
          ))}

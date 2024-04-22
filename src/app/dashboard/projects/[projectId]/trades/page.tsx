@@ -9,7 +9,7 @@ export default async function CreateProject({ params } : { params: { projectId: 
    const project = await api.projects.get({ projectId: params.projectId });
    const trades = await api.trades.list();
 
-   console.log('project', project);
+   const selectedTrades = project?.trades?.map((trade) => ({ id: trade.trade.id, name: trade.trade.name })) ?? [];
    return (
       <>
          <DarkNavHeader title={'Trade Line Items'} />
@@ -17,7 +17,7 @@ export default async function CreateProject({ params } : { params: { projectId: 
             <>
                <div className="mt-10 flex justify-center">
                   <div className="w-1/2">
-                     <ComboBox projectId={params.projectId} listItems={trades} selected={project?.trades ?? []} />
+                     <ComboBox projectId={params.projectId} listItems={trades} selected={selectedTrades} />
                      <TradeForm />
                   </div>
                </div>
@@ -25,7 +25,7 @@ export default async function CreateProject({ params } : { params: { projectId: 
                   <ul>
                      { project && project?.trades?.map((trade) => (
                         <li key={trade.id}>
-                           {trade.name}
+                           {trade.trade.name}
                         </li>
                      )) }
                   </ul>

@@ -11,25 +11,26 @@ function classNames(...classes: Array<string | boolean | undefined>) {
 }
 
 type Contractor = {
-   id: string;
+   id: string
    profile: {
-      firstName: string | null;
-      lastName: string | null;
       user: {
-         email: string;
-         image: string | null;
-      }
+         id: string,
+         email: string,
+         image: string | null
+      },
+      firstName: string,
+      lastName: string
    } | null;
 }
 
 type Contractors = Array<Contractor>
 
-export default function ContractorList({ projectId, contractors, selected } : { projectId: string, contractors: Contractors, selected: Contractors }) {
+export default function ContractorList({ contractors, selected, type } : { contractors: Contractors, selected: Contractors, type: 'team' | 'subcontractor' }) {
    const router = useRouter();
    const [query, setQuery] = useState('')
    const [selectedItems, setSelectedItems] = useState<Contractors>(selected)
 
-   const addSubcontractor = api.projects.addSubcontractor.useMutation(
+   const addTeamMember = api.team.addTeamMember.useMutation(
       {
          onSuccess: () => {
             router.refresh();
@@ -37,7 +38,24 @@ export default function ContractorList({ projectId, contractors, selected } : { 
       }
    );
 
-   const removeSubcontractor = api.projects.addSubcontractor.useMutation(
+   const removeTeamMember = api.team.removeTeamMember.useMutation(
+      {
+         onSuccess: () => {
+            setSelectedItems([]);
+            router.refresh();
+         }
+      }
+   );
+
+   const addSubcontractor = api.team.addSubcontractor.useMutation(
+      {
+         onSuccess: () => {
+            router.refresh();
+         }
+      }
+   );
+
+   const removeSubcontractor = api.team.addSubcontractor.useMutation(
       {
          onSuccess: () => {
             setSelectedItems([]);
@@ -60,12 +78,21 @@ export default function ContractorList({ projectId, contractors, selected } : { 
 
       if(add && add.length > 0 && add[0]?.id) {
          setQuery('');
-         await addSubcontractor.mutateAsync({ projectId, contractorId: add[0].id });
+         if(type === 'team') {
+            await addTeamMember.mutateAsync({ contractorId: add[0].id });
+         } else {
+            await addSubcontractor.mutateAsync({ contractorId: add[0].id });
+         }
 
       }
 
       if(remove && remove.length > 0 && remove[0]?.id) {
-         await removeSubcontractor.mutateAsync({ projectId, contractorId: remove[0].id });
+         if(type === 'team') {
+            await removeTeamMember.mutateAsync({ contractorId: remove[0].id });
+         } else {
+            await removeSubcontractor.mutateAsync({ contractorId: remove[0].id });
+
+         }
       }
    }
 

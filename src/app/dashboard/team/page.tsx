@@ -3,7 +3,7 @@ import ProjectHeader from '~/components/Project/ProjectHeader';
 import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
 import TradeItems from '~/components/Project/TradeItems';
-import ComboBox from '~/components/ComboBox';
+import TeamCombobox from '~/components/Team/TeamCombobox';
 import ContractorList from '~/components/Project/ContractorList';
 import TeamList from '~/components/Team/TeamList';
 
@@ -12,15 +12,12 @@ export default async function ProjectPage({ params } : { params: { projectId: st
    const team = await api.team.listTeam();
    const subcontractors = await api.team.listSubContractors();
 
-   const contractors = await api.projects.listContractors();
+   const contractors = await api.team.listContractors();
 
    // const selected = project?.trades.map(({ trade }) => trade) ?? []
 
    // console.log('subs', project?.subContractors);
    // const selectedSubs = project?.subContractors?.map(({ contractor }) => ({ id: contractor.id, profile: contractor.profile })) ?? []
-
-   console.log('team', team);
-   console.log('subs', subcontractors);
    return (
       <>
          <DarkNavHeader title={'Team'} />
@@ -32,11 +29,18 @@ export default async function ProjectPage({ params } : { params: { projectId: st
                   {/*<ComboBox projectId={params.projectId} listItems={trades} selected={selected} />*/}
                   {/*<TradeItems projectId={params.projectId} trades={project.trades} />*/}
                   {/*<Calendar />*/}
-                  {/*<ContractorList projectId={params.projectId} contractors={contractors} selected={selectedSubs} />*/}
                   <h2 className="text-base font-semibold leading-7 text-gray-900">Team</h2>
                   { team?.team && <TeamList team={team?.team} /> }
+                  <div>
+                     <h2 className="mt-10 text-base font-semibold leading-7 text-gray-900">Add Team Members</h2>
+                     <TeamCombobox contractors={contractors} selected={team?.team ?? []} type={'team'} />
+                  </div>
                   <h2 className="mt-10 text-base font-semibold leading-7 text-gray-900">Subcontractors</h2>
                   { subcontractors?.subContractors && <TeamList team={subcontractors?.subContractors} /> }
+                  <div>
+                     <h2 className="mt-10 text-base font-semibold leading-7 text-gray-900">Add Subcontractors</h2>
+                     <TeamCombobox contractors={contractors} selected={subcontractors?.subContractors ?? []} type={'subcontractor'} />
+                  </div>
                </div>
             </div>
          </DarkNavContainer>
