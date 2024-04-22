@@ -153,23 +153,42 @@ export const profilesRouter = createTRPCRouter({
          country: z.string().min(1)
       }))
       .mutation(async ({ ctx, input }) => {
-      return ctx.db.serviceArea.create({
-         data: {
-            name: '',
-            serviceRange: parseInt(input.serviceRange),
-            location: {
-               city: input.city,
-               state: input.state,
-               postalCode: input.postalCode,
-               country: input.country,
+         return ctx.db.contractor.update({
+            where: {
+               id: ctx.session.user.profile.contractorProfile.id,
             },
-            contractors: {
-               connect: {
-                  id: ctx.session.user.profile.contractorProfile.id
+            data: {
+               serviceAreas: {
+                  create: {
+                     name: input.name,
+                     serviceRange: parseInt(input.serviceRange),
+                     location: {
+                        city: input.city,
+                        state: input.state,
+                        postalCode: input.postalCode,
+                        country: input.country,
+                     },
+                  }
                }
-            },
-         }
-      });
+            }
+         });
+      // return ctx.db.serviceArea.create({
+      //    data: {
+      //       name: '',
+      //       serviceRange: parseInt(input.serviceRange),
+      //       location: {
+      //          city: input.city,
+      //          state: input.state,
+      //          postalCode: input.postalCode,
+      //          country: input.country,
+      //       },
+      //       contractors: {
+      //          connect: {
+      //             id: ctx.session.user.profile.contractorProfile.id
+      //          }
+      //       },
+      //    }
+      // });
    }),
    addServiceAreas: protectedProcedure
       .input(z.object({
@@ -185,23 +204,90 @@ export const profilesRouter = createTRPCRouter({
       }))
       .mutation(async ({ ctx, input }) => {
          return Promise.allSettled(input.serviceAreas.map(async (serviceArea) => {
-            return ctx.db.serviceArea.create({
+            return ctx.db.contractor.update({
+               where: {
+                  id: ctx.session.user.profile.contractorProfile.id,
+               },
                data: {
-                  name: serviceArea.name,
-                  serviceRange: parseInt(serviceArea.serviceRange),
-                  location: {
-                     city: serviceArea.city,
-                     state: serviceArea.state,
-                     postalCode: serviceArea.postalCode,
-                     country: serviceArea.country,
-                  },
-                  contractors: {
-                     connect: {
-                        id: ctx.session.user.profile.contractorProfile.id
+                  serviceAreas: {
+                     create: {
+                        name: serviceArea.name,
+                        serviceRange: parseInt(serviceArea.serviceRange),
+                        location: {
+                           city: serviceArea.city,
+                           state: serviceArea.state,
+                           postalCode: serviceArea.postalCode,
+                           country: serviceArea.country,
+                        },
+                     }
+                  }
+               }
+            })
+         }));
+      }),
+   addSubcontractor: protectedProcedure.input(z.object({ contractorId: z.string().min(1) })).mutation(({ ctx, input }) => {
+      return ctx.db.contractor.update({
+         where: {
+            id: ctx.session.user.profile.contractorProfile.id,
+         },
+         data: {
+            subContractors: {
+               connect: {
+                  id: input.contractorId,
+               },
+            },
+         },
+      });
+   }),
+   removeSubcontractor: protectedProcedure.input(z.object({ contractorId: z.string().min(1) })).mutation(({ ctx, input }) => {
+      return ctx.db.contractor.update({
+         where: {
+            id: ctx.session.user.profile.contractorProfile.id,
+         },
+         data: {
+            subContractors: {
+               disconnect: {
+                  id: input.contractorId,
+               },
+            },
+         },
+      });
+   }),
+   addTeamMember: protectedProcedure.input(z.object({ contractorId: z.string().min(1) })).mutation(async ({ ctx, input }) => {
+      return ctx.db.contractor.update({
+         where: {
+            id: ctx.session.user.profile.contractorProfile.id,
+         },
+         data: {
+            subContractors: {
+               connect: {
+                  id: input.contractorId,
+               }
+            }
+         }
+      });
+   }),
+   getTeam: protectedProcedure.query(async ({ ctx }) => {
+      return ctx.db.contractor.findUnique({
+         where: {
+            id: ctx.session.user.profile.contractorProfile.id,
+         },
+         select: {
+            subContractors: {
+               include: {
+                  profile: {
+                     include: {
+                        user: {
+                           select: {
+                              email: true,
+                              id: true,
+                           }
+                        }
                      }
                   },
                }
-            });
-         }))
-      }),
+            },
+         }
+      });
+   })
 });

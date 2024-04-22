@@ -5,14 +5,22 @@ import DarkNavHeader from '~/components/DarkNav/Header';
 import TradeItems from '~/components/Project/TradeItems';
 import ComboBox from '~/components/ComboBox';
 import ContractorList from '~/components/Project/ContractorList';
+import { getServerAuthSession } from '~/server/auth';
 
 export default async function ProjectPage({ params } : { params: { projectId: string } }) {
+   const serverSession = await getServerAuthSession();
+
    const project = await api.projects.get({ projectId: params.projectId });
    const contractors = await api.projects.listContractors();
    const trades = await api.trades.list();
 
-   const selected = project?.trades.map(({ trade }) => trade) ?? []
+   const selected = project?.trades.map(({ trade }) => trade) ?? [];
 
+   const isProjectOwner = project?.contractorId === serverSession?.user?.profile?.contractorProfile?.id;
+
+   const selectedSubs = project?.subContractors?.map(({ contractor }) => ({ id: contractor.id, profile: contractor.profile })) ?? []
+
+   console.log('isProjectOwner', isProjectOwner);
 
    return project && (
       <>
@@ -22,10 +30,10 @@ export default async function ProjectPage({ params } : { params: { projectId: st
                <ProjectHeader project={project} />
                <div className={'mt-10'}>
                   {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-                  <ComboBox projectId={params.projectId} listItems={trades} selected={selected} />
+                  { isProjectOwner && <ComboBox projectId={params.projectId} listItems={trades} selected={selected} /> }
                   <TradeItems projectId={params.projectId} trades={project.trades} />
                   {/*<Calendar />*/}
-                  { contractors.length > 0 && <ContractorList projectId={params.projectId} contractors={contractors} /> }
+                  { isProjectOwner && <ContractorList projectId={params.projectId} contractors={contractors} selected={selectedSubs} /> }
                </div>
             </div>
          </DarkNavContainer>

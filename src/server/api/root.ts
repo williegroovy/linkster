@@ -2,6 +2,7 @@ import { projectsRouter } from "~/server/api/routers/projects";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { profilesRouter } from '~/server/api/routers/profiles';
 import { tradesRouter } from '~/server/api/routers/trades';
+import { teamRouter } from '~/server/api/routers/team';
 
 /**
  * This is the primary router for your server.
@@ -11,7 +12,8 @@ import { tradesRouter } from '~/server/api/routers/trades';
 export const appRouter = createTRPCRouter({
   projects: projectsRouter,
   profiles: profilesRouter,
-  trades: tradesRouter
+  trades: tradesRouter,
+  team: teamRouter,
 });
 
 // export type definition of API

@@ -24,12 +24,6 @@ export default async function DashboardLayout({
       redirect('/login');
    }
 
-   // if(!serverSession?.user?.profile) {
-   //    redirect('/profile');
-   // }
-
-   console.log('d-layout serverSession', serverSession?.user)
-
    if(!serverSession?.user?.profile || !serverSession?.user?.profile?.onboarded) {
       return (
          <main className="py-8">
