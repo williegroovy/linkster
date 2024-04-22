@@ -4,9 +4,11 @@ import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
 import TradeItems from '~/components/Project/TradeItems';
 import ComboBox from '~/components/ComboBox';
+import ContractorList from '~/components/Project/ContractorList';
 
 export default async function ProjectPage({ params } : { params: { projectId: string } }) {
    const project = await api.projects.get({ projectId: params.projectId });
+   const contractors = await api.projects.listContractors();
    const trades = await api.trades.list();
 
    const selected = project?.trades.map(({ trade }) => trade) ?? []
@@ -23,6 +25,7 @@ export default async function ProjectPage({ params } : { params: { projectId: st
                   <ComboBox projectId={params.projectId} listItems={trades} selected={selected} />
                   <TradeItems projectId={params.projectId} trades={project.trades} />
                   {/*<Calendar />*/}
+                  { contractors.length > 0 && <ContractorList projectId={params.projectId} contractors={contractors} /> }
                </div>
             </div>
          </DarkNavContainer>

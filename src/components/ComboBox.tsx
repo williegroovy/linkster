@@ -72,9 +72,6 @@ export default function ComboBox({ projectId, listItems, selected }: { projectId
    }
 
    const handleOnChange = async (newListItems: ListItems) => {
-      console.log('onChange', newListItems);
-      // console.log('last', listItem.pop());
-      // const newItem = listItem.pop();
 
       setSelectedItems(newListItems);
 
@@ -85,10 +82,6 @@ export default function ComboBox({ projectId, listItems, selected }: { projectId
       const remove = selectedItems?.filter((listItem) => {
          return !newListItems?.includes(listItem);
       });
-
-      console.log('add', add);
-      console.log('remove', remove);
-
 
       if(add && add.length > 0 && add[0]?.id) {
          const trade = await addTrade.mutateAsync({ projectId, tradeId: add[0].id });

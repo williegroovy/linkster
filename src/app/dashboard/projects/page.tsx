@@ -9,6 +9,9 @@ import { redirect } from 'next/navigation';
 
 export default async function ProjectsPage() {
    const projects = await api.projects.list();
+   const contractor = await api.projects.listSubcontractorProjects();
+
+   console.log('subcontractedProjects', contractor?.subContractedProjects);
 
    return (
       <>
@@ -29,36 +32,69 @@ export default async function ProjectsPage() {
                <div className={'px-4 sm:px-6 lg:px-8'}>
                   <div className={'mt-20'}>
                      <ul role="list" className="divide-y divide-gray-100">
-                  {projects.map((project) => (
-                     <li key={project.id} className="flex items-center justify-between gap-x-6 py-5">
-                        <div className="min-w-0">
-                           <div className="flex items-start gap-x-3">
-                              <p className="text-sm font-semibold leading-6 text-gray-900">{project.name}</p>
-                           </div>
-                           <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
-                              <p>
-                                 {project.description}
-                              </p>
-                              <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
-                                 <circle cx={1} cy={1} r={1} />
-                              </svg>
-                              <p className="whitespace-nowrap">
-                                 {project?.address?.street}, {project?.address?.city}, {project?.address?.state} {project?.address?.postalCode}
-                              </p>
-                           </div>
-                        </div>
-                        <div className="flex flex-none items-center gap-x-4">
-                           <a
-                              href={`/dashboard/projects/${project.id}`}
-                              className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
-                           >
-                              View project<span className="sr-only">, {project.name}</span>
-                           </a>
-                           <ProjectMenu projectName={project.name} />
-                        </div>
-                     </li>
-                  ))}
-               </ul>
+                        {projects.map((project) => (
+                           <li key={project.id} className="flex items-center justify-between gap-x-6 py-5">
+                              <div className="min-w-0">
+                                 <div className="flex items-start gap-x-3">
+                                    <p className="text-sm font-semibold leading-6 text-gray-900">{project.name}</p>
+                                 </div>
+                                 <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+                                    <p>
+                                       {project.description}
+                                    </p>
+                                    <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
+                                       <circle cx={1} cy={1} r={1} />
+                                    </svg>
+                                    <p className="whitespace-nowrap">
+                                       {project?.address?.street}, {project?.address?.city}, {project?.address?.state} {project?.address?.postalCode}
+                                    </p>
+                                 </div>
+                              </div>
+                              <div className="flex flex-none items-center gap-x-4">
+                                 <a
+                                    href={`/dashboard/projects/${project.id}`}
+                                    className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
+                                 >
+                                    View project<span className="sr-only">, {project.name}</span>
+                                 </a>
+                                 <ProjectMenu projectName={project.name} />
+                              </div>
+                           </li>
+                        ))}
+                     </ul>
+                  </div>
+                  <div className={'mt-20'}>
+                     <ul role="list" className="divide-y divide-gray-100">
+                        {contractor && contractor?.subContractedProjects?.map((subProjects) => (
+                           <li key={subProjects.project.id} className="flex items-center justify-between gap-x-6 py-5">
+                              <div className="min-w-0">
+                                 <div className="flex items-start gap-x-3">
+                                    <p className="text-sm font-semibold leading-6 text-gray-900">{subProjects.project.name}</p>
+                                 </div>
+                                 <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+                                    <p>
+                                       {subProjects.project.description}
+                                    </p>
+                                    <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
+                                       <circle cx={1} cy={1} r={1} />
+                                    </svg>
+                                    <p className="whitespace-nowrap">
+                                       {subProjects.project?.address?.street}, {subProjects.project?.address?.city}, {subProjects.project?.address?.state} {subProjects.project?.address?.postalCode}
+                                    </p>
+                                 </div>
+                              </div>
+                              <div className="flex flex-none items-center gap-x-4">
+                                 <a
+                                    href={`/dashboard/projects/${subProjects.project.id}`}
+                                    className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
+                                 >
+                                    View project<span className="sr-only">, {subProjects.project.name}</span>
+                                 </a>
+                                 <ProjectMenu projectName={subProjects.project.name} />
+                              </div>
+                           </li>
+                        ))}
+                     </ul>
                   </div>
                </div>
                ) : (
