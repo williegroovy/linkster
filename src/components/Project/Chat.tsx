@@ -53,7 +53,7 @@ type Chat = {
 export default function Chat({ chatId, image, initials } : { chatId: string, image?: string, initials?: string }) {
    const [selected, setSelected] = useState(moods[5]);
 
-   const { data: chat, refetch } = api.projects.getChat.useQuery({ chatId }, { refetchInterval: 1000, refetchIntervalInBackground: true });
+   const { data: chat, refetch } = api.projects.getChat.useQuery({ chatId }, { refetchInterval: 5000, refetchIntervalInBackground: true });
    const sendChat = api.projects.sendChat.useMutation({
       onSuccess: () => {
          refetch();

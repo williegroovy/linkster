@@ -18,28 +18,14 @@ type ListItem = {
 
 type ListItems = Array<ListItem>;
 
-export default function ComboBox({ projectId, listItems, selected }: { projectId: string, listItems: ListItems, selected?: ListItems }) {
+export default function TradeComboBox({ projectId, listItems, setTradeId }: { projectId: string, listItems: ListItems, setTradeId?: (tradeId: string) => void }) {
    const router = useRouter();
 
 
    const [query, setQuery] = useState('')
-   const [selectedItems, setSelectedItems] = useState<ListItems>(selected ?? []);
+   const [selectedItems, setSelectedItems] = useState<ListItem>();
 
-   const addTrade = api.projects.addTrade.useMutation(
-      {
-         onSuccess: () => {
-            router.refresh();
-         }
-      }
-   );
-
-   const removeTrade = api.projects.removeTrade.useMutation(
-      {
-         onSuccess: () => {
-            router.refresh();
-         }
-      }
-   );
+   const addTrade = api.projects.addTrade.useMutation();
 
    const createTrade = api.trades.create.useMutation(
       {
@@ -53,45 +39,33 @@ export default function ComboBox({ projectId, listItems, selected }: { projectId
       query === ''
          ? listItems
          : listItems?.filter((listItem) => {
-            return listItem?.name.toLowerCase().includes(query.toLowerCase())
-         }) ?? listItems
+         return listItem?.name.toLowerCase().includes(query.toLowerCase())
+      }) ?? listItems
 
    const handleOnKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
       if(e.key === 'Enter') {
          if(filteredListItems.length === 0) {
             const tradeLineItem = await createTrade.mutateAsync({ name: query });
-            await addTrade.mutateAsync({ projectId, tradeId: tradeLineItem.id });
-            setQuery('');
-            setSelectedItems([...selectedItems, tradeLineItem]);
+            const trade = await addTrade.mutateAsync({ projectId, tradeId: tradeLineItem.id });
+            if(setTradeId) {
+               console.log('trade', trade);
+               setTradeId(trade.id);
+            }
          }
       }
    }
 
-   const handleOnChange = async (newListItems: ListItems) => {
-
-      setSelectedItems(newListItems);
-
-      const add = newListItems?.filter((listItem) => {
-         return !selectedItems?.includes(listItem);
-      });
-
-      const remove = selectedItems?.filter((listItem) => {
-         return !newListItems?.includes(listItem);
-      });
-
-      if(add && add.length > 0 && add[0]?.id) {
-         const trade = await addTrade.mutateAsync({ projectId, tradeId: add[0].id });
-
-      }
-
-      if(remove && remove.length > 0 && remove[0]?.id) {
-         await removeTrade.mutateAsync({ projectId, tradeId: remove[0].id });
+   const handleOnChange = async (newListItem: ListItem) => {
+      const trade = await addTrade.mutateAsync({ projectId, tradeId: newListItem.id });
+      console.log('added trade', trade);
+      if(setTradeId) {
+         setTradeId(trade.id);
       }
    }
 
 
    return (
-      <Combobox className={'mb-10'} as="div" by={'id'} value={selectedItems} onChange={handleOnChange} multiple>
+      <Combobox className={'mb-10'} as="div" value={selectedItems} onChange={handleOnChange}>
          <Combobox.Label className="block text-sm font-medium leading-6 text-gray-900">Create or add trade</Combobox.Label>
          <div className="relative mt-2">
             <Combobox.Input

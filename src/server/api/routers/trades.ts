@@ -29,6 +29,17 @@ export const tradesRouter = createTRPCRouter({
          }
       });
    }),
+   get: protectedProcedure.input(z.object({ tradeId: z.string().min(1) })).query(({ ctx, input }) => {
+      return ctx.db.tradeLineItems.findUnique({
+         where: {
+            id: input.tradeId
+         },
+         include: {
+            tasks: true,
+            trade: true,
+         }
+      });
+   }),
    list: protectedProcedure.query(({ ctx }) => {
       return ctx.db.trade.findMany({
          select: {

@@ -14,7 +14,7 @@ export default async function ProjectPage({ params } : { params: { projectId: st
 
    const contractors = await api.team.listContractors();
 
-   // const selected = project?.trades.map(({ trade }) => trade) ?? []
+   // const selected = project?.addtrade.map(({ trade }) => trade) ?? []
 
    // console.log('subs', project?.subContractors);
    // const selectedSubs = project?.subContractors?.map(({ contractor }) => ({ id: contractor.id, profile: contractor.profile })) ?? []
@@ -26,8 +26,8 @@ export default async function ProjectPage({ params } : { params: { projectId: st
                {/*<ProjectHeader project={project} />*/}
                <div className={'mt-10'}>
                   {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-                  {/*<ComboBox projectId={params.projectId} listItems={trades} selected={selected} />*/}
-                  {/*<TradeItems projectId={params.projectId} trades={project.trades} />*/}
+                  {/*<ComboBox projectId={params.projectId} listItems={addtrade} selected={selected} />*/}
+                  {/*<TradeItems projectId={params.projectId} addtrade={project.addtrade} />*/}
                   {/*<Calendar />*/}
                   <h2 className="text-base font-semibold leading-7 text-gray-900">Team</h2>
                   { team?.team && <TeamList team={team?.team} /> }

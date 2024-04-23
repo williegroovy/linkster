@@ -178,12 +178,10 @@ export const projectsRouter = createTRPCRouter({
          }
       });
    }),
-   sendChat: protectedProcedure
-      .input(z.object({
+   sendChat: protectedProcedure.input(z.object({
          chatId: z.string().min(1),
          content: z.string().min(1)
-      }))
-      .mutation(({ ctx, input }) => {
+      })).mutation(({ ctx, input }) => {
          return ctx.db.chatActivity.create({
             data: {
                chat: {
@@ -201,20 +199,18 @@ export const projectsRouter = createTRPCRouter({
          });
    }),
    addTrade: protectedProcedure.input(z.object({ projectId: z.string().min(1), tradeId: z.string().min(1) })).mutation(({ ctx, input }) => {
-      return ctx.db.project.update({
-         where: {
-            id: input.projectId,
-         },
+      return ctx.db.tradeLineItems.create({
          data: {
-            trades: {
-               create: {
-                  trade: {
-                     connect: {
-                        id: input.tradeId,
-                     },
-                  }
-               }
+            project: {
+               connect: {
+                  id: input.projectId,
+               },
             },
+            trade: {
+               connect: {
+                  id: input.tradeId,
+               },
+            }
          }
       });
    }),
@@ -225,21 +221,10 @@ export const projectsRouter = createTRPCRouter({
          }
       });
    }),
-   addTradeTask: protectedProcedure
-      .input(z.object({
-         name: z.string().min(1),
-         description: z.string().min(1),
-         status: z.enum(["NOT_STARTED", "IN_PROGRESS", "COMPLETED"]),
-         dueDate: z.date(),
-         tradeId: z.string().min(1)
-      }))
-      .mutation(({ ctx, input }) => {
+   addTradeTask: protectedProcedure.input(z.object({ description: z.string().min(1), tradeId: z.string().min(1) })).mutation(({ ctx, input }) => {
       return ctx.db.tradeTask.create({
          data: {
-            name: input.name,
             description: input.description,
-            status: input.status,
-            dueDate: input.dueDate,
             tradeLineItem: {
                connect: {
                   id: input.tradeId
@@ -275,5 +260,5 @@ export const projectsRouter = createTRPCRouter({
             content: input.content
          },
       });
-   })
+   }),
 });

@@ -6,7 +6,7 @@ import {
 
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import HeaderMenu from '~/components/Project/HeaderMenu';
-import AddTrade from '~/components/Project/AddTrade';
+import AddTask from '~/components/Project/Trade/AddTask';
 
 type Project = {
    id: string;
@@ -20,7 +20,7 @@ type Project = {
    } | null;
 };
 
-export default function ProjectHeader({ project, isProjectOwner = false } : { project: Project, isProjectOwner?: boolean }) {
+export default function TradeHeader({ project, tradeId, isProjectOwner = false } : { project: Project, tradeId: string, isProjectOwner?: boolean }) {
    return (
       <div className="xl:flex xl:items-center xl:justify-between">
          <div className="min-w-0 flex-1">
@@ -63,7 +63,7 @@ export default function ProjectHeader({ project, isProjectOwner = false } : { pr
                   </button>
                </span>
                <span className="xl:ml-3">
-                  <AddTrade projectId={project.id} isProjectOwner={isProjectOwner} />
+                  <AddTask tradeId={tradeId} isProjectOwner={isProjectOwner} />
                </span>
                <HeaderMenu />
             </div>

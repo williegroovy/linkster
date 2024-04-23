@@ -123,7 +123,6 @@ export default async function ProjectsPage() {
                            >
                               View project<span className="sr-only">, {subProjects.project.name}</span>
                            </a>
-                           <ProjectMenu projectName={subProjects.project.name} />
                         </div>
                      </li>
                   ))}
