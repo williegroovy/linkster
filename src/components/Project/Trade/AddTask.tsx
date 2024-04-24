@@ -24,13 +24,13 @@ export default function AddTask({ tradeId, isProjectOwner = false } : { tradeId:
          setDescription('');
       }
    }
-   
+
    const toggle = () => {
       setDialogOpen(!dialogOpen);
    }
 
    return [
-      <Transition.Root show={dialogOpen} as={Fragment}>
+      <Transition.Root key={'dialog'} show={dialogOpen} as={Fragment}>
          <Dialog as="div" className="relative z-10" onClose={toggle}>
             <Transition.Child
                as={Fragment}
@@ -104,6 +104,7 @@ export default function AddTask({ tradeId, isProjectOwner = false } : { tradeId:
          </Dialog>
       </Transition.Root>,
       <button
+         key={'button'}
          onClick={toggle}
          // href={`/dashboard/projects/${project.id}?createTrade=true`}
          className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

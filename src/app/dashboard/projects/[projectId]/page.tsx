@@ -36,7 +36,7 @@ export default async function ProjectPage({ params, searchParams } : { params: {
                   {/*{ isProjectOwner && <ComboBox projectId={params.projectId} listItems={trades} selected={selected} /> }*/}
                   <TradeItems projectId={params.projectId} trades={project.trades} isProjectOwner={isProjectOwner} />
                   {/*<Calendar />*/}
-                  { isProjectOwner && <ContractorList projectId={params.projectId} contractors={contractors} selected={selectedSubs} /> }
+                  {/*{ isProjectOwner && <ContractorList projectId={params.projectId} contractors={contractors} selected={selectedSubs} /> }*/}
                   {/*<div className={'mt-10'}>*/}
                   {/*   { project.chats.length > 0 && project?.chats[0] && <Chat image={serverSession?.user?.image} chatId={project.chats[0].id} initials={initials} /> }*/}
                   {/*</div>*/}

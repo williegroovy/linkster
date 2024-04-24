@@ -4,6 +4,7 @@ import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
 import Chat from '~/components/Project/Chat';
 import { getServerAuthSession } from '~/server/auth';
+import TaskList from '~/components/Project/Trade/TaskList';
 
 export default async function ProjectPage({ params } : { params: { projectId: string, tradeId: string } }) {
    const serverSession = await getServerAuthSession();
@@ -23,11 +24,7 @@ export default async function ProjectPage({ params } : { params: { projectId: st
                </div>
                <div className={'mt-10'}>
                   <h2 className="text-md font-semibold leading-7 text-gray-900">Tasks</h2>
-                  { tradeLineItem && tradeLineItem.tasks.map((task) => (
-                     <div key={task.id} className={'mt-4'}>
-                        <p className="text-sm leading-5 text-gray-900">{task.description}</p>
-                     </div>
-                  ))}
+                  <TaskList tasks={tradeLineItem?.tasks} isProjectOwner={isProjectOwner} />
                </div>
             </div>
          </DarkNavContainer>
