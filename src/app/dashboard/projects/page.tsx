@@ -35,11 +35,11 @@ export default async function ProjectsPage() {
                                  <div className="flex items-start gap-x-3">
                                     <p className="text-sm font-semibold leading-6 text-gray-900">{project.name}</p>
                                  </div>
-                                 <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+                                 <div className="mt-1 flex flex-col md:flex-row md:items-center gap-y-2 md:gap-x-2 text-xs md:leading-5 text-gray-500">
                                     <p>
                                        {project.description}
                                     </p>
-                                    <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
+                                    <svg viewBox="0 0 2 2" className="hidden h-0.5 w-0.5 fill-current md:block">
                                        <circle cx={1} cy={1} r={1} />
                                     </svg>
                                     <p className="whitespace-nowrap">
@@ -50,7 +50,7 @@ export default async function ProjectsPage() {
                               <div className="flex flex-none items-center gap-x-4">
                                  <a
                                     href={`/dashboard/projects/${project.id}`}
-                                    className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
+                                    className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
                                  >
                                     View project<span className="sr-only">, {project.name}</span>
                                  </a>
@@ -104,11 +104,11 @@ export default async function ProjectsPage() {
                            <div className="flex items-start gap-x-3">
                               <p className="text-sm font-semibold leading-6 text-gray-900">{subProjects.project.name}</p>
                            </div>
-                           <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+                           <div className="mt-1 flex flex-col md:flex-row md:items-center gap-y-2 md:gap-x-2 text-xs md:leading-5 text-gray-500">
                               <p>
                                  {subProjects.project.description}
                               </p>
-                              <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
+                              <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current hidden md:block">
                                  <circle cx={1} cy={1} r={1} />
                               </svg>
                               <p className="whitespace-nowrap">
@@ -119,7 +119,7 @@ export default async function ProjectsPage() {
                         <div className="flex flex-none items-center gap-x-4">
                            <a
                               href={`/dashboard/projects/${subProjects.project.id}`}
-                              className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
+                              className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
                            >
                               View project<span className="sr-only">, {subProjects.project.name}</span>
                            </a>
