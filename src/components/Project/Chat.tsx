@@ -1,5 +1,5 @@
 'use client';
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useRef, KeyboardEvent, FormEvent } from 'react';
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import {
    FaceFrownIcon,
@@ -52,6 +52,7 @@ type Chat = {
 
 export default function Chat({ chatId, image, initials } : { chatId: string, image?: string, initials?: string }) {
    const [selected, setSelected] = useState(moods[5]);
+   const formRef = useRef(null);
 
    const { data: chat, refetch } = api.projects.getChat.useQuery({ chatId }, { refetchInterval: 5000, refetchIntervalInBackground: true });
    const sendChat = api.projects.sendChat.useMutation({
@@ -60,16 +61,24 @@ export default function Chat({ chatId, image, initials } : { chatId: string, ima
       }
    });
 
-   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const comment = e.currentTarget.comment.value;
       await sendChat.mutateAsync({ chatId, content: comment });
-      e.currentTarget.comment.value = '';
+      // @ts-ignore
+      formRef?.current?.reset();
+   }
+
+   const handleOnKeyDown = async (e: KeyboardEvent<HTMLFormElement>) => {
+      if(e.key === 'Enter') {
+         // @ts-ignore
+         await handleSubmit(e);
+      }
    }
 
    return chat && (
-      <>
-         <ul role="list" className="space-y-6">
+      <div className={'max-h-screen'}>
+         <ul role="list" className="max-h-[80vh] space-y-6 overflow-y-auto">
             {chat?.activity.map((activityItem, activityItemIdx) => (
                <li key={activityItem.id} className="relative flex gap-x-4">
                   <div
@@ -98,7 +107,7 @@ export default function Chat({ chatId, image, initials } : { chatId: string, ima
                                  <span className="font-medium text-gray-900">{activityItem.sender.profile?.firstName} {activityItem.sender.profile?.lastName}</span> commented
                               </div>
                               <time dateTime={activityItem.createdAt.toString()} className="flex-none py-0.5 text-xs leading-5 text-gray-500">
-                                 {activityItem.createdAt.toString()}
+                                 {`${activityItem.createdAt.getDay()}/${activityItem.createdAt.getDate()}/${activityItem.createdAt.getFullYear()}`}
                               </time>
                            </div>
                            <p className="text-sm leading-6 text-gray-500">{activityItem.content}</p>
@@ -118,7 +127,7 @@ export default function Chat({ chatId, image, initials } : { chatId: string, ima
                            invoice.
                         </p>
                         <time dateTime={activityItem.createdAt.toString()} className="flex-none py-0.5 text-xs leading-5 text-gray-500">
-                           {activityItem.createdAt.toString()}
+                           {`${activityItem.createdAt.getDay()}/${activityItem.createdAt.getDate()}/${activityItem.createdAt.getFullYear()}`}
                         </time>
                      </>
                   )}
@@ -138,7 +147,7 @@ export default function Chat({ chatId, image, initials } : { chatId: string, ima
                   { initials ?? '' }
                </div>
             }
-            <form onSubmit={handleSubmit} className="relative flex-auto">
+            <form ref={formRef} onKeyDown={handleOnKeyDown} onSubmit={handleSubmit} className="relative flex-auto">
                <div className="overflow-hidden rounded-lg pb-12 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
                   <label htmlFor="comment" className="sr-only">
                      Add your comment
@@ -245,6 +254,6 @@ export default function Chat({ chatId, image, initials } : { chatId: string, ima
                </div>
             </form>
          </div>
-      </>
+      </div>
    )
 }

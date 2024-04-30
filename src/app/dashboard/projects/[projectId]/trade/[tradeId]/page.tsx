@@ -13,9 +13,15 @@ export default async function ProjectPage({ params } : { params: { projectId: st
    const tradeLineItem = await api.trades.get({ tradeId: params.tradeId });
    const isProjectOwner = project?.contractorId === serverSession?.user?.profile?.contractorProfile?.id;
 
+   console.log(tradeLineItem);
+
    return project && (
       <>
-         <DarkNavHeader title={'Trade Line Items'} />
+         <DarkNavHeader>
+            <div className="flex flex-wrap items-center gap-6 px-4 sm:flex-nowrap sm:px-6 lg:px-8">
+               <h1 className="text-base font-semibold leading-7 text-indigo-600">{project.name} Trade Creation</h1>
+            </div>
+         </DarkNavHeader>
          <DarkNavContainer>
             <div className={'px-4 sm:px-6 lg:px-8'}>
                <TradeHeader project={project} tradeId={params.tradeId} isProjectOwner={isProjectOwner} />

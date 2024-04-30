@@ -65,7 +65,7 @@ export default function TradeHeader({ project, tradeId, isProjectOwner = false }
                <span className="xl:ml-3">
                   <AddTask tradeId={tradeId} isProjectOwner={isProjectOwner} />
                </span>
-               <HeaderMenu />
+               <HeaderMenu projectId={project.id}/>
             </div>
          )}
       </div>

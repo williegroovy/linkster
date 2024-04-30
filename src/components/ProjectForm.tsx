@@ -16,10 +16,9 @@ type ProjectDetails = {
 export default function ProjectForm() {
    const router = useRouter();
    const createProject = api.projects.create.useMutation({
-      onSuccess: () => {
-         router.push('/dashboard/projects');
-         router.refresh();
-      }
+      // onSuccess: () => {
+      //    router.refresh();
+      // }
    });
 
    const [projectDetails, setProjectDetails] = useState<ProjectDetails>({
@@ -40,7 +39,8 @@ export default function ProjectForm() {
    }
 
    const handleSubmit = async () => {
-      await createProject.mutateAsync(projectDetails);
+      const newProject = await createProject.mutateAsync(projectDetails);
+      router.push(`/dashboard/projects/${newProject.id}`);
    }
 
    return (

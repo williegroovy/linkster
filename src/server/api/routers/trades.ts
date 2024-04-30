@@ -25,7 +25,12 @@ export const tradesRouter = createTRPCRouter({
          },
          select: {
             id: true,
-            trade: true
+            trade: true,
+            tasks: {
+               select: {
+                  subContractors: true
+               }
+            }
          }
       });
    }),
@@ -35,7 +40,11 @@ export const tradesRouter = createTRPCRouter({
             id: input.tradeId
          },
          include: {
-            tasks: true,
+            tasks: {
+               include: {
+                  subContractors: true
+               }
+            },
             trade: true,
          }
       });

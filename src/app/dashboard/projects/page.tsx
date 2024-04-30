@@ -11,22 +11,28 @@ export default async function ProjectsPage() {
 
    return (
       <>
-         <DarkNavHeader title={'Projects'}>
+         <DarkNavHeader>
             { projects && projects.length > 0 && (
-               <div className="flex flex-wrap items-center sm:flex-nowrap">
-                  <a
-                     href="/dashboard/projects/create"
-                     className="ml-auto flex items-center gap-x-1 rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >
-                     New project
-                  </a>
-               </div>
+               <>
+                  <div className="flex flex-wrap items-center gap-6 px-4 sm:flex-nowrap sm:px-6 lg:px-8">
+                     <h1 className="text-base font-semibold leading-7 text-gray-900">Projects</h1>
+                  </div>
+                  <div className="flex flex-wrap items-center sm:flex-nowrap">
+                     <a
+                        href="/dashboard/projects/create"
+                        className="ml-auto flex items-center gap-x-1 rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                     >
+                        New project
+                     </a>
+
+                  </div>
+               </>
             )}
          </DarkNavHeader>
          <DarkNavContainer>
             { projects && projects.length > 0 ? (
                <div className={'px-4 sm:px-6 lg:px-8'}>
-                  <div className={'mt-20'}>
+                  <div className={'md:mt-10'}>
                      <h2 className="text-base font-semibold leading-7 text-gray-900">My Projects</h2>
                      <ul role="list" className="divide-y divide-gray-100">
                         {projects.map((project) => (
@@ -52,7 +58,7 @@ export default async function ProjectsPage() {
                                     href={`/dashboard/projects/${project.id}`}
                                     className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
                                  >
-                                    View project<span className="sr-only">, {project.name}</span>
+                                    Manage<span className="sr-only">, {project.name}</span>
                                  </a>
                                  <ProjectMenu projectName={project.name} />
                               </div>
@@ -94,11 +100,11 @@ export default async function ProjectsPage() {
                </div>
                )
             }
+            {contractor && contractor?.subContractedProjects?.map((subProjects) => (
             <div className={'px-4 sm:px-6 lg:px-8'}>
                <div className={'mt-20'}>
-               <h2 className="text-base font-semibold leading-7 text-gray-900">Subcontractor Projects</h2>
-               <ul role="list" className="divide-y divide-gray-100">
-                  {contractor && contractor?.subContractedProjects?.map((subProjects) => (
+                  <h2 className="text-base font-semibold leading-7 text-gray-900">Subcontractor Projects</h2>
+                  <ul role="list" className="divide-y divide-gray-100">
                      <li key={subProjects.project.id} className="flex items-center justify-between gap-x-6 py-5">
                         <div className="min-w-0">
                            <div className="flex items-start gap-x-3">
@@ -121,14 +127,14 @@ export default async function ProjectsPage() {
                               href={`/dashboard/projects/${subProjects.project.id}`}
                               className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
                            >
-                              View project<span className="sr-only">, {subProjects.project.name}</span>
+                              View<span className="sr-only">, {subProjects.project.name}</span>
                            </a>
                         </div>
                      </li>
-                  ))}
-               </ul>
+                  </ul>
+               </div>
             </div>
-            </div>
+            ))}
          </DarkNavContainer>
       </>
    )

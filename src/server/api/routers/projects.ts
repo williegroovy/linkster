@@ -36,6 +36,35 @@ export const projectsRouter = createTRPCRouter({
         },
       });
     }),
+   update: protectedProcedure
+      .input(z.object({
+         name: z.string().min(1),
+         description: z.string().optional(),
+         address: z.string().min(1),
+         city: z.string().min(1),
+         state: z.string().min(1),
+         postalCode: z.string().min(1),
+         country: z.string().min(1),
+      }))
+      .mutation(async ({ ctx, input }) => {
+         return ctx.db.project.create({
+            data: {
+               name: input.name,
+               ...input.description && { description: input.description },
+               address: {
+                  street: input.address,
+                  city: input.city,
+                  state: input.state,
+                  postalCode: input.postalCode,
+                  country: input.country,
+               },
+               chats: {
+                  create: {},
+               },
+               contractor: { connect: { id: ctx.session.user.profile.contractorProfile.id } },
+            },
+         });
+      }),
    list: protectedProcedure.query(({ ctx }) => {
       return ctx.db.project.findMany({
          orderBy: { createdAt: "desc" },
@@ -214,6 +243,34 @@ export const projectsRouter = createTRPCRouter({
          }
       });
    }),
+   assignTradeContractor: protectedProcedure.input(z.object({ projectId: z.string().min(1), tradeId: z.string().min(1), contractorId: z.string().min(1) })).mutation(({ ctx, input }) => {
+      return ctx.db.tradeLineItems.update({
+         where: {
+            id: input.tradeId,
+         },
+         data: {
+            subContractor: {
+               connectOrCreate: {
+                  where: {
+                     id: input.contractorId,
+                  },
+                  create: {
+                     project: {
+                        connect: {
+                           id: input.projectId,
+                        }
+                     },
+                     contractor: {
+                        connect: {
+                           id: input.contractorId,
+                        }
+                     },
+                  },
+               },
+            },
+         },
+      });
+   }),
    removeTrade: protectedProcedure.input(z.object({ projectId: z.string().min(1), tradeId: z.string().min(1) })).mutation(({ ctx, input }) => {
       return ctx.db.tradeLineItems.delete({
          where: {
@@ -221,7 +278,7 @@ export const projectsRouter = createTRPCRouter({
          }
       });
    }),
-   addTradeTask: protectedProcedure.input(z.object({ description: z.string().min(1), tradeId: z.string().min(1) })).mutation(({ ctx, input }) => {
+   addTradeTask: protectedProcedure.input(z.object({ description: z.string().min(1), tradeId: z.string().min(1), subContractorId: z.string().min(1).optional() })).mutation(({ ctx, input }) => {
       return ctx.db.tradeTask.create({
          data: {
             description: input.description,
@@ -229,6 +286,13 @@ export const projectsRouter = createTRPCRouter({
                connect: {
                   id: input.tradeId
                },
+               ...input.subContractorId && {
+                  subContractor: {
+                     connect: {
+                        id: input.subContractorId
+                     }
+                  }
+               }
             },
          }
       });
