@@ -142,6 +142,7 @@ model ProjectSubContractor {
   tradeTaskId    String?          @db.ObjectId
   TradeLineItems TradeLineItems[]
 
+  @@unique([projectId, contractorId, tradeTaskId])
   @@map("project_sub_contractors")
 }
 

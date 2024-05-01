@@ -1,12 +1,12 @@
 'use client';
 
-import { Fragment, KeyboardEvent, useState } from 'react';
+import { cloneElement, ReactElement, Fragment, KeyboardEvent, useState } from 'react';
 import { CheckIcon } from '@heroicons/react/20/solid';
 import { Dialog, Transition } from '@headlessui/react';
 import { api } from '~/trpc/react';
 import { useRouter } from 'next/navigation';
 
-export default function AddTask({ tradeId, isProjectOwner = false } : { tradeId: string, isProjectOwner?: boolean }) {
+export default function AddTask({ tradeId, isProjectOwner = false, children } : { tradeId: string, isProjectOwner?: boolean, children?: ReactElement }) {
    const router = useRouter();
    const [dialogOpen, setDialogOpen] = useState(false);
    const [description, setDescription] = useState<string>('');
@@ -45,7 +45,7 @@ export default function AddTask({ tradeId, isProjectOwner = false } : { tradeId:
             </Transition.Child>
 
             <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-               <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+               <div className="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
                   <Transition.Child
                      as={Fragment}
                      enter="ease-out duration-300"
@@ -103,14 +103,6 @@ export default function AddTask({ tradeId, isProjectOwner = false } : { tradeId:
             </div>
          </Dialog>
       </Transition.Root>,
-      <button
-         key={'button'}
-         onClick={toggle}
-         // href={`/dashboard/projects/${project.id}?createTrade=true`}
-         className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-      >
-         <CheckIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" />
-         Add Task
-      </button>
+      children && cloneElement(children, { onClick: toggle, key: 'button' })
    ]
 }

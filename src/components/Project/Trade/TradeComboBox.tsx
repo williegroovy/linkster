@@ -27,13 +27,7 @@ export default function TradeComboBox({ projectId, listItems, setTradeId }: { pr
 
    const addTrade = api.projects.addTrade.useMutation();
 
-   const createTrade = api.trades.create.useMutation(
-      {
-         onSuccess: () => {
-            router.refresh();
-         }
-      }
-   );
+   const createTrade = api.trades.create.useMutation();
 
    const filteredListItems =
       query === ''
@@ -58,9 +52,10 @@ export default function TradeComboBox({ projectId, listItems, setTradeId }: { pr
    const handleOnChange = async (newListItem: ListItem) => {
       const trade = await addTrade.mutateAsync({ projectId, tradeId: newListItem.id });
       console.log('added trade', trade);
-      if(setTradeId) {
-         setTradeId(trade.id);
-      }
+      router.replace(`/dashboard/projects/${projectId}/trade/${trade.id}`);
+      // if(setTradeId) {
+      //    setTradeId(trade.id);
+      // }
    }
 
 

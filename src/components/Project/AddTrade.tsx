@@ -1,15 +1,18 @@
 'use client';
 
-import { Fragment, useState } from 'react';
+import { cloneElement, ReactElement, ReactNode, Fragment, useState } from 'react';
 import { CheckIcon } from '@heroicons/react/20/solid';
 import { Dialog, Transition } from '@headlessui/react';
 import TradeComboBox from '~/components/Project/Trade/TradeComboBox';
 import { api } from '~/trpc/react';
 import TradeCreation from '~/components/Project/Trade/TradeCreation';
 
-export default function AddTrade({ projectId, isProjectOwner = false } : { projectId: string, isProjectOwner?: boolean }) {
+export default function AddTrade({ projectId, isProjectOwner = false, children } : { projectId: string, isProjectOwner?: boolean, children?: ReactNode }) {
 
    const [dialogOpen, setDialogOpen] = useState(false);
+   const [tradeId, setTradeId] = useState<string | null>(null);
+
+   const { data: trades } = api.trades.list.useQuery();
 
    const toggle = () => {
       setDialogOpen(!dialogOpen);
@@ -41,7 +44,7 @@ export default function AddTrade({ projectId, isProjectOwner = false } : { proje
                      leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                      leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                   >
-                     <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full min-h-[80vh] sm:max-w-xl sm:p-6">
+                     <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full min-h-[40vh] sm:max-w-xl sm:p-6">
                         <div>
                            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
                               <CheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
@@ -51,7 +54,9 @@ export default function AddTrade({ projectId, isProjectOwner = false } : { proje
                                  Add Trade
                               </Dialog.Title>
                               <div className="mt-2">
-                                 <TradeCreation projectId={projectId} isProjectOwner={isProjectOwner} />
+                                 { trades && <TradeComboBox setTradeId={setTradeId} projectId={projectId} listItems={trades} /> }
+
+                                 {/*<TradeCreation projectId={projectId} isProjectOwner={isProjectOwner} />*/}
                                  {/*{ trades && trades.length > 0 && <TradeComboBox projectId={projectId} listItems={trades} setTradeId={setTradeId} /> }*/}
 
                               </div>
@@ -72,14 +77,6 @@ export default function AddTrade({ projectId, isProjectOwner = false } : { proje
             </div>
          </Dialog>
       </Transition.Root>,
-      <button
-         key={'button'}
-         onClick={toggle}
-         // href={`/dashboard/projects/${project.id}?createTrade=true`}
-         className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-      >
-         <CheckIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" />
-         Add Trade
-      </button>
+      children && cloneElement(children as ReactElement, { onClick: toggle })
    ]
 }
