@@ -9,21 +9,7 @@ function classNames(...classes: Array<string | undefined | boolean>) {
    return classes.filter(Boolean).join(' ')
 }
 
-export default function DropdownMenu({ id, projectId, trade } : { id: string, projectId: string, trade: { id: string, name: string } }) {
-
-   const router = useRouter();
-
-   const removeTrade = api.projects.removeTrade.useMutation(
-      {
-         onSuccess: () => {
-            router.refresh();
-         }
-      }
-   );
-
-   const handleRemoveTrade = async () => {
-      await removeTrade.mutateAsync({ projectId, tradeId: id });
-   }
+export default function DropdownMenu({ id, name, onDelete } : { id: string, name: string, onDelete: (id: string) => void }) {
 
    return (
       <Menu as="div" className="relative flex-none">
@@ -71,13 +57,13 @@ export default function DropdownMenu({ id, projectId, trade } : { id: string, pr
                   {({ active }) => (
                      <button
                         type={'button'}
-                        onClick={handleRemoveTrade}
+                        onClick={() => onDelete(id)}
                         className={classNames(
                            active ? 'bg-gray-50' : '',
                            'block px-3 py-1 text-sm leading-6 text-gray-900'
                         )}
                      >
-                        Delete<span className="sr-only">, {trade.name}</span>
+                        Delete<span className="sr-only">, {name}</span>
                      </button>
                   )}
                </Menu.Item>

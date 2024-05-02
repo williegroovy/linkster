@@ -1,7 +1,7 @@
 'use client';
 
 import { cloneElement, ReactElement, Fragment, KeyboardEvent, useState } from 'react';
-import { CheckIcon } from '@heroicons/react/20/solid';
+import { CheckIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { Dialog, Transition } from '@headlessui/react';
 import { api } from '~/trpc/react';
 import { useRouter } from 'next/navigation';
@@ -10,23 +10,30 @@ export default function AddTask({ tradeId, isProjectOwner = false, children } : 
    const router = useRouter();
    const [dialogOpen, setDialogOpen] = useState(false);
    const [description, setDescription] = useState<string>('');
+   const [createdTasks, setCreatedTasks] = useState<string[]>([]);
 
    const createTask = api.projects.addTradeTask.useMutation({
-      onSuccess: () => {
-         router.refresh();
-         setDialogOpen(false);
-      }
+      // onSuccess: () => {
+      //    router.refresh();
+      //    setDialogOpen(false);
+      // }
    });
+
+   const handleSubmit = async (description: string) => {
+      await createTask.mutateAsync({ tradeId, description });
+   }
 
    const handleOnKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
       if(e.key === 'Enter') {
-         await createTask.mutateAsync({ tradeId, description });
+         setCreatedTasks([...createdTasks, description]);
          setDescription('');
+         await handleSubmit(description);
       }
    }
 
    const toggle = () => {
       setDialogOpen(!dialogOpen);
+      router.refresh();
    }
 
    return [
@@ -66,25 +73,57 @@ export default function AddTask({ tradeId, isProjectOwner = false, children } : 
                               </Dialog.Title>
                               <div className="mt-2">
                                  <div className="flex justify-between">
-                                    <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
+                                    <label htmlFor="task-description" className="block text-sm font-medium leading-6 text-gray-900">
                                        Trade Task Description
                                     </label>
                                  </div>
-                                 <div className="mt-2">
+                                 <div className="relative flex flex-grow items-stretch focus-within:z-10">
                                     <input
                                        type="text"
-                                       name="description"
-                                       id="description"
+                                       name="task-description"
+                                       id="task-description"
                                        value={description}
                                        onChange={(e) => setDescription(e.target.value)}
                                        onKeyDown={handleOnKeyDown}
-                                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                       className="block w-full rounded-none rounded-l-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                        placeholder="Trade task description"
                                        aria-describedby="trade-task"
                                     />
+                                    <button
+                                       type="button"
+                                       onClick={() => handleSubmit(description)}
+                                       className="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md p-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                    >
+                                       <PlusIcon className="-ml-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                       Add
+                                    </button>
                                  </div>
                                  {/*{ trades && trades.length > 0 && <TradeComboBox projectId={projectId} listItems={trades} setTradeId={setTradeId} /> }*/}
-
+                                 { createdTasks.length > 0 &&
+                                   <ul role="list" className="mb-10 divide-y divide-gray-100">
+                                      {createdTasks?.map((description, idx) => (
+                                         <li key={`${idx}-${description}`} className="flex items-center justify-between gap-x-6 py-5">
+                                            <div className="min-w-0">
+                                               <div className="flex items-start gap-x-3">
+                                                  <p className="text-sm font-semibold leading-6 text-gray-900">{description}</p>
+                                               </div>
+                                               <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+                                                  <p className="whitespace-nowrap">
+                                                     Due on <time dateTime={'10:00am'}>{'05/05/24'}</time>
+                                                  </p>
+                                                  <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
+                                                     <circle cx={1} cy={1} r={1} />
+                                                  </svg>
+                                                  <p className="truncate">Assigned to {'user'}</p>
+                                               </div>
+                                            </div>
+                                            <div className="flex flex-none items-center gap-x-4">
+                                               {/*{ isProjectOwner && <DropdownMenu id={id} trade={trade} projectId={projectId} /> }*/}
+                                            </div>
+                                         </li>
+                                      ))}
+                                   </ul>
+                                 }
                               </div>
                            </div>
                         </div>

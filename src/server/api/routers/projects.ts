@@ -65,6 +65,13 @@ export const projectsRouter = createTRPCRouter({
             },
          });
       }),
+   delete: protectedProcedure.input(z.object({ projectId: z.string().min(1) })).mutation(async ({ ctx, input }) => {
+      return ctx.db.project.delete({
+         where: {
+            id: input.projectId,
+         },
+      });
+   }),
    list: protectedProcedure.query(({ ctx }) => {
       return ctx.db.project.findMany({
          orderBy: { createdAt: "desc" },
@@ -294,6 +301,13 @@ export const projectsRouter = createTRPCRouter({
                   }
                }
             },
+         }
+      });
+   }),
+   deleteTradeTask: protectedProcedure.input(z.object({ taskId: z.string().min(1) })).mutation(({ ctx, input }) => {
+      return ctx.db.tradeTask.delete({
+         where: {
+            id: input.taskId
          }
       });
    }),

@@ -9,6 +9,7 @@ import AddTrade from '~/components/Project/AddTrade';
 import HeaderMenu from '~/components/Project/HeaderMenu';
 import Link from 'next/link';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import { ChevronLeftIcon } from '@heroicons/react/20/solid';
 
 export default async function ProjectPage({ params, searchParams } : { params: { projectId: string }, searchParams?: { [key: string]: string } }) {
    const serverSession = await getServerAuthSession();
@@ -24,12 +25,14 @@ export default async function ProjectPage({ params, searchParams } : { params: {
    const selectedSubs = project?.subContractors?.map(({ contractor }) => ({ id: contractor.id, profile: contractor.profile })) ?? []
    const initials = serverSession?.user.name.split(' ').map((n) => n[0]).join('');
 
-   console.log('project', project);
    return project && (
       <>
          <DarkNavHeader>
-            <div className="flex flex-col flex-wrap items-center gap-6 px-4 sm:px-6 lg:px-8">
-               <div className="flex flex-wrap gap-6">
+            <div className="flex flex-col flex-wrap items-center gap-3 px-4 sm:px-6 lg:px-8">
+               <div className="flex flex-wrap gap-y-2 gap-x-1 md:gap-x-3 items-center">
+                  <Link className={'md:hidden'} href={'/dashboard/projects'}>
+                     <ChevronLeftIcon className="h-6 w-6 text-gray-800" />
+                  </Link>
                   <h1 className="text-base font-semibold leading-7 text-indigo-600">{project.name}</h1>
                   <div className="order-last flex w-full gap-x-8 text-sm font-semibold leading-6 sm:order-none sm:w-auto sm:border-l sm:border-gray-200 sm:pl-6 sm:leading-7">
                      <a href={`/dashboard/projects/${params.projectId}/chat`} className="text-gray-700">
@@ -43,12 +46,12 @@ export default async function ProjectPage({ params, searchParams } : { params: {
                      </a>
                   </div>
                </div>
-               <div className={'flex flex-wrap w-full gap-4 text-sm'}>
+               <div className={'flex flex-wrap w-full gap-x-4 text-xs'}>
                   {/*<div className="mt-2 flex items-center text-sm text-gray-500">*/}
                   {/*   <InformationCircleIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />*/}
                   {/*   {project.description ?? 'No description'}*/}
                   {/*</div>*/}
-                  <div className="mt-2 flex items-center text-sm text-gray-500">
+                  <div className="mt-2 flex items-center text-xs text-gray-500">
                      <MapPinIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
                      {project?.address?.street}, {project?.address?.city}, {project?.address?.state} {project?.address?.postalCode}
                   </div>

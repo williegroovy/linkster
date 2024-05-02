@@ -26,8 +26,12 @@ export default async function ProjectPage({ params } : { params: { projectId: st
          {/*   </div>*/}
          {/*</DarkNavHeader>*/}
          <DarkNavHeader>
-               <div className="flex flex-wrap items-center gap-6">
-                  <h1 className="text-base font-semibold leading-7 text-indigo-600">{project.name}</h1>
+               <div className="flex flex-wrap items-center gap-2">
+                  <Link href={`/dashboard/projects/${params.projectId}`}>
+                     <h1 className="hover:underline text-base font-semibold leading-7 text-indigo-600">{project.name}</h1>
+                  </Link>
+                  -
+                  { tradeLineItem && <h2 className="text-base font-semibold leading-7 text-gray-900">{tradeLineItem.trade.name}</h2> }
 
                   {/*<div className="order-last flex w-full gap-x-8 text-sm font-semibold leading-6 sm:order-none sm:w-auto sm:border-l sm:border-gray-200 sm:pl-6 sm:leading-7">*/}
                   {/*   <a href={`/dashboard/projects/${params.projectId}/chat`} className="text-gray-700">*/}
@@ -93,13 +97,10 @@ export default async function ProjectPage({ params } : { params: { projectId: st
          <DarkNavContainer>
             <div className={'px-4 sm:px-6 lg:px-8'}>
                {/*<TradeHeader project={project} tradeId={params.tradeId} isProjectOwner={isProjectOwner} />*/}
-               <div className={'mt-10'}>
-                  { tradeLineItem && <h2 className="text-lg font-semibold leading-7 text-gray-900">{tradeLineItem.trade.name}</h2> }
-               </div>
                { tradeLineItem?.tasks && tradeLineItem.tasks.length > 0 ?
                  <div className={'mt-10'}>
                   <h2 className="text-md font-semibold leading-7 text-gray-900">Tasks</h2>
-                  <TaskList tasks={tradeLineItem.tasks} isProjectOwner={isProjectOwner} />
+                  <TaskList tasks={tradeLineItem.tasks} projectId={params.projectId} tradeId={params.tradeId} isProjectOwner={isProjectOwner} />
                </div>
                   : <div className="h-[50vh] flex flex-col justify-center text-center">
                      <svg

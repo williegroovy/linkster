@@ -4,10 +4,17 @@ import { api } from '~/trpc/server';
 import ProjectMenu from '~/components/ProjectMenu';
 import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
+import router from 'next/navigation'
 
 export default async function ProjectsPage() {
    const projects = await api.projects.list();
    const contractor = await api.projects.listSubcontractorProjects();
+
+   const onDeleteProject = async (projectId: string) => {
+      'use server';
+      await api.projects.delete({ projectId });
+      router.redirect('/dashboard/projects');
+   }
 
    return (
       <>
@@ -60,7 +67,7 @@ export default async function ProjectsPage() {
                                  >
                                     Manage<span className="sr-only">, {project.name}</span>
                                  </a>
-                                 <ProjectMenu projectName={project.name} />
+                                 <ProjectMenu projectName={project.name} projectId={project.id} deleteProject={onDeleteProject} />
                               </div>
                            </li>
                         ))}

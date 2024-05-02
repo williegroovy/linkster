@@ -1,4 +1,6 @@
 import DropdownMenu from '~/components/Project/DropdownMenu';
+import { api } from '~/trpc/server';
+import { redirect } from 'next/navigation';
 
 // const statuses = {
 //    Complete: 'text-green-700 bg-green-50 ring-green-600/20',
@@ -58,6 +60,13 @@ function classNames(...classes: Array<string | undefined | boolean>) {
 }
 
 export default function TradeItems({ trades, projectId, isProjectOwner } : { trades: Array<{ id: string, trade: { id: string, name: string } }>, projectId: string, isProjectOwner: boolean }) {
+
+   const onDeleteTrade = async (id: string) => {
+      'use server';
+      await api.projects.removeTrade({ projectId, tradeId: id });
+      redirect(`/dashboard/projects/${projectId}`);
+   }
+
    return (
       <ul role="list" className="mb-10 divide-y divide-gray-100">
          {trades.map(({ id, trade }) => (
@@ -88,9 +97,9 @@ export default function TradeItems({ trades, projectId, isProjectOwner } : { tra
                      href={`/dashboard/projects/${projectId}/trade/${id}`}
                      className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
                   >
-                     View trade<span className="sr-only">, {trade.name}</span>
+                     Tasks<span className="sr-only">, {trade.name}</span>
                   </a>
-                  { isProjectOwner && <DropdownMenu id={id} trade={trade} projectId={projectId} /> }
+                  { isProjectOwner && <DropdownMenu id={id} name={trade.name} onDelete={onDeleteTrade} /> }
                </div>
             </li>
          ))}

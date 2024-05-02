@@ -3,12 +3,13 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
+import Link from 'next/link';
 
 function classNames(...classes: Array<string | boolean>) {
    return classes.filter(Boolean).join(' ')
 }
 
-export default function ProjectMenu({ projectName } : { projectName: string }) {
+export default function ProjectMenu({ projectName, projectId, deleteProject } : { projectName: string, projectId: string, deleteProject: (projectId: string) => void }) {
    return (
       <Menu as="div" className="relative flex-none">
          <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
@@ -27,41 +28,28 @@ export default function ProjectMenu({ projectName } : { projectName: string }) {
             <Menu.Items className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                <Menu.Item>
                   {({ active }) => (
-                     <a
-                        href="src/app/dashboard/projects#"
+                     <Link
+                        href={`/dashboard/projects/${projectId}/edit`}
                         className={classNames(
                            active ? 'bg-gray-50' : '',
                            'block px-3 py-1 text-sm leading-6 text-gray-900'
                         )}
                      >
                         Edit<span className="sr-only">, {projectName}</span>
-                     </a>
+                     </Link>
                   )}
                </Menu.Item>
                <Menu.Item>
                   {({ active }) => (
-                     <a
-                        href="src/app/dashboard/projects#"
-                        className={classNames(
-                           active ? 'bg-gray-50' : '',
-                           'block px-3 py-1 text-sm leading-6 text-gray-900'
-                        )}
-                     >
-                        Move<span className="sr-only">, {projectName}</span>
-                     </a>
-                  )}
-               </Menu.Item>
-               <Menu.Item>
-                  {({ active }) => (
-                     <a
-                        href="src/app/dashboard/projects#"
+                     <button
+                        onClick={() => deleteProject(projectId)}
                         className={classNames(
                            active ? 'bg-gray-50' : '',
                            'block px-3 py-1 text-sm leading-6 text-gray-900'
                         )}
                      >
                         Delete<span className="sr-only">, {projectName}</span>
-                     </a>
+                     </button>
                   )}
                </Menu.Item>
             </Menu.Items>
