@@ -1,9 +1,9 @@
 'use client';
 
 import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon, EllipsisVerticalIcon, PencilIcon, PlusIcon } from '@heroicons/react/20/solid';
+import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
+import { EllipsisVerticalIcon, PencilIcon, PlusIcon, ChevronLeftIcon, CalendarIcon, LinkIcon } from '@heroicons/react/20/solid';
 import { Fragment } from 'react';
-import AddTrade from '~/components/Project/AddTrade';
 import Link from 'next/link';
 
 function classNames(...classes: Array<string | boolean>) {
@@ -61,6 +61,42 @@ export default function HeaderMenu({ projectId, isProjectOwner } : { projectId: 
                         <PencilIcon className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
 
                         Edit
+                     </Link>
+                  )}
+               </Menu.Item>
+               <Menu.Item>
+                  {({ active }) => (
+                     <Link
+                        href={`/dashboard/projects/${projectId}/chat`}
+                        className={classNames(active ? 'bg-gray-100' : '', 'flex block px-4 py-2 text-sm text-gray-700')}
+                     >
+                        <ChatBubbleLeftEllipsisIcon className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+
+                        Chat
+                     </Link>
+                  )}
+               </Menu.Item>
+               <Menu.Item>
+                  {({ active }) => (
+                     <Link
+                        href={`/dashboard/projects/${projectId}/calendar`}
+                        className={classNames(active ? 'bg-gray-100' : '', 'flex block px-4 py-2 text-sm text-gray-700')}
+                     >
+                        <CalendarIcon className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+
+                        Calendar
+                     </Link>
+                  )}
+               </Menu.Item>
+               <Menu.Item>
+                  {({ active }) => (
+                     <Link
+                        href={`/dashboard/projects/${projectId}/subcontractors`}
+                        className={classNames(active ? 'bg-gray-100' : '', 'flex block px-4 py-2 text-sm text-gray-700')}
+                     >
+                        <LinkIcon className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+
+                        Subcontractors
                      </Link>
                   )}
                </Menu.Item>

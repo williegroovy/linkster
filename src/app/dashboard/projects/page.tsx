@@ -5,6 +5,7 @@ import ProjectMenu from '~/components/ProjectMenu';
 import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
 import router from 'next/navigation'
+import ProjectSlideout from '~/components/Project/ProjectSlideout';
 
 export default async function ProjectsPage() {
    const projects = await api.projects.list();
@@ -25,18 +26,19 @@ export default async function ProjectsPage() {
                      <h1 className="text-base font-semibold leading-7 text-gray-900">Projects</h1>
                   </div>
                   <div className="flex flex-wrap items-center sm:flex-nowrap">
-                     <a
+                     <Link
                         href="/dashboard/projects/create"
                         className="ml-auto flex items-center gap-x-1 rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                      >
                         New project
-                     </a>
+                     </Link>
 
                   </div>
                </>
             )}
          </DarkNavHeader>
          <DarkNavContainer>
+            <ProjectSlideout />
             { projects && projects.length > 0 ? (
                <div className={'px-4 sm:px-6 lg:px-8'}>
                   <div className={'md:mt-10'}>
@@ -61,12 +63,12 @@ export default async function ProjectsPage() {
                                  </div>
                               </div>
                               <div className="flex flex-none items-center gap-x-4">
-                                 <a
+                                 <Link
                                     href={`/dashboard/projects/${project.id}`}
                                     className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
                                  >
                                     Manage<span className="sr-only">, {project.name}</span>
-                                 </a>
+                                 </Link>
                                  <ProjectMenu projectName={project.name} projectId={project.id} deleteProject={onDeleteProject} />
                               </div>
                            </li>
@@ -130,12 +132,12 @@ export default async function ProjectsPage() {
                            </div>
                         </div>
                         <div className="flex flex-none items-center gap-x-4">
-                           <a
+                           <Link
                               href={`/dashboard/projects/${subProjects.project.id}`}
                               className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
                            >
                               View<span className="sr-only">, {subProjects.project.name}</span>
-                           </a>
+                           </Link>
                         </div>
                      </li>
                   </ul>
