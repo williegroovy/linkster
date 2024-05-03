@@ -8,6 +8,7 @@ import { PrimaryFeatures } from '~/components/PrimaryFeatures'
 import { SecondaryFeatures } from '~/components/SecondaryFeatures'
 import { Testimonials } from '~/components/Testimonials'
 import { getServerAuthSession } from '~/server/auth'
+import BetaCard from '~/components/BetaCard';
 
 export default async function Home() {
    const session = await getServerAuthSession();
@@ -19,11 +20,12 @@ export default async function Home() {
       <main>
          <Hero />
          <PrimaryFeatures />
-           {/*<SecondaryFeatures />*/}
-           {/*<CallToAction />*/}
-           {/*<Testimonials />*/}
-           {/*<Pricing />*/}
-           {/*<Faqs />*/}
+         <SecondaryFeatures />
+         <BetaCard />
+         {/*<CallToAction />*/}
+         {/*<Testimonials />*/}
+         {/*<Pricing />*/}
+         {/*<Faqs />*/}
       </main>
       <Footer />
     </>

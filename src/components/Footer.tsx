@@ -3,13 +3,14 @@ import Link from 'next/link'
 import { Container } from '~/components/Container'
 import { Logo } from '~/components/Logo'
 import { NavLink } from '~/components/NavLink'
+import Image from 'next/image';
 
 export function Footer() {
   return (
     <footer className="bg-slate-50">
       <Container>
         <div className="py-16">
-          <Logo className="mx-auto h-10 w-auto" />
+          <Image src="/images/linkster-logo.png" alt="Logo" className={'mx-auto'} width={132} height={40} />
           <nav className="mt-10 text-sm" aria-label="quick links">
             <div className="-my-1 flex justify-center gap-x-6">
               <NavLink href="#features">Features</NavLink>
@@ -40,7 +41,7 @@ export function Footer() {
             </Link>
           </div>
           <p className="mt-6 text-sm text-slate-500 sm:mt-0">
-            Copyright &copy; {new Date().getFullYear()} TaxPal. All rights
+            Copyright &copy; {new Date().getFullYear()} Linkster.io. All rights
             reserved.
           </p>
         </div>
