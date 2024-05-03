@@ -1,17 +1,18 @@
 import { Inter, Lexend } from 'next/font/google'
 import clsx from 'clsx'
 import { TRPCReactProvider } from '~/trpc/react';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 import '~/styles/globals.css'
 import { type Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: {
-    template: '%s - TaxPal',
-    default: 'TaxPal - Accounting made simple for small businesses',
+    template: '%s - Linkster',
+    default: 'Linkster - Plan, Connect, Build',
   },
   description:
-    'Most bookkeeping software is accurate, but hard to use. We make the opposite trade-off, and hope you don’t get audited.',
+    'Plan, Connect, Build',
 }
 
 const inter = Inter({
@@ -43,6 +44,7 @@ export default function RootLayout({
       <body className="flex h-full flex-col">
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
+      <GoogleAnalytics gaId={'G-E3N9N28PCN'} />
     </html>
   )
 }

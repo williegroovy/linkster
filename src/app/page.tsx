@@ -17,13 +17,13 @@ export default async function Home() {
     <>
       <Header signedIn={signedIn} />
       <main>
-        <Hero />
-        <PrimaryFeatures />
-        <SecondaryFeatures />
-        <CallToAction />
-        <Testimonials />
-        <Pricing />
-        <Faqs />
+         <Hero />
+         <PrimaryFeatures />
+           {/*<SecondaryFeatures />*/}
+           {/*<CallToAction />*/}
+           {/*<Testimonials />*/}
+           {/*<Pricing />*/}
+           {/*<Faqs />*/}
       </main>
       <Footer />
     </>
