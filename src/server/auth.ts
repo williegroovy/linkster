@@ -144,6 +144,22 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
+    signIn: async ({ user, account, profile, email, credentials }) => {
+      if (account?.provider === 'email' && user?.email) {
+        const userExists = await db.user.findFirst({
+          where : {
+            email: user.email,
+          }
+        });
+
+        if(userExists) {
+          return true;
+        } else {
+          return '/register';
+        }
+      }
+      return true;
+    },
     session: async ({ session, user }) => {
       const profile = await db.profile.findUnique({
          where: {
