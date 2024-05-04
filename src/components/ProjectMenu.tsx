@@ -28,19 +28,6 @@ export default function ProjectMenu({ projectName, projectId, deleteProject } : 
             <Menu.Items className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                <Menu.Item>
                   {({ active }) => (
-                     <Link
-                        href={`/dashboard/projects/${projectId}/edit`}
-                        className={classNames(
-                           active ? 'bg-gray-50' : '',
-                           'block px-3 py-1 text-sm leading-6 text-gray-900'
-                        )}
-                     >
-                        Edit<span className="sr-only">, {projectName}</span>
-                     </Link>
-                  )}
-               </Menu.Item>
-               <Menu.Item>
-                  {({ active }) => (
                      <button
                         onClick={() => deleteProject(projectId)}
                         className={classNames(
