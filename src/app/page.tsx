@@ -21,11 +21,11 @@ export default async function Home() {
          <Hero />
          <PrimaryFeatures />
          <SecondaryFeatures />
-         <BetaCard />
-         {/*<CallToAction />*/}
+         {/*<BetaCard />*/}
+         <CallToAction />
          {/*<Testimonials />*/}
-         {/*<Pricing />*/}
-         {/*<Faqs />*/}
+         <Pricing />
+         <Faqs />
       </main>
       <Footer />
     </>

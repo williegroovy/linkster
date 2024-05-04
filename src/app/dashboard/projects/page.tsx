@@ -17,6 +17,34 @@ export default async function ProjectsPage() {
       router.redirect('/dashboard/projects');
    }
 
+   const createProject = async function(formData: FormData) {
+      'use server'
+
+      const name = formData.get('name') as string | null;
+      const description = formData.get('description') as string | null;
+      const country = 'United States'
+      const address = formData.get('address') as string | null;
+      const city = formData.get('city') as string | null;
+      const state = formData.get('state') as string | null;
+      const postalCode = formData.get('postalCode') as string | null;
+
+      if(name && description && country && address && city && state && postalCode) {
+         const projectUpdate = {
+            name,
+            description,
+            country,
+            address,
+            city,
+            state,
+            postalCode
+         }
+
+         const newProject = await api.projects.create(projectUpdate);
+         router.redirect(`/dashboard/projects/${newProject.id}`);
+      }
+
+   }
+
    return (
       <>
          <DarkNavHeader>
@@ -26,19 +54,24 @@ export default async function ProjectsPage() {
                      <h1 className="text-base font-semibold leading-7 text-gray-900">Projects</h1>
                   </div>
                   <div className="flex flex-wrap items-center sm:flex-nowrap">
-                     <Link
-                        href="/dashboard/projects/create"
-                        className="ml-auto flex items-center gap-x-1 rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                     >
-                        New project
-                     </Link>
+                     <ProjectSlideout formAction={createProject} >
+                        <button
+                           className="ml-auto flex items-center gap-x-1 rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        >
+                           New project
+                        </button>
+                     </ProjectSlideout>
 
                   </div>
                </>
             )}
          </DarkNavHeader>
          <DarkNavContainer>
-            <ProjectSlideout />
+            <ProjectSlideout formAction={createProject} >
+               <button className="fixed bottom-4 right-4 rounded-full bg-indigo-600 p-4 text-white">
+                  <PlusIcon className="h-6 w-6" />
+               </button>
+            </ProjectSlideout>
             { projects && projects.length > 0 ? (
                <div className={'px-4 sm:px-6 lg:px-8'}>
                   <div className={'md:mt-10'}>

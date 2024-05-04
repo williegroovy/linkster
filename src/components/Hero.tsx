@@ -32,7 +32,7 @@ export function Hero() {
         opposite trade-off, and hope to simply your project management.
       </p>
       <div className="mt-10 flex justify-center gap-x-6">
-        <Button href="#beta-signup">Sign up for the beta</Button>
+        <Button href="#beta-signup">Get 3 months free</Button>
         <Button
           href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
           variant="outline"

@@ -135,7 +135,7 @@ export function Pricing() {
         <div className="-mx-4 mt-16 grid max-w-2xl grid-cols-1 gap-y-10 sm:mx-auto lg:-mx-8 lg:max-w-none lg:grid-cols-3 xl:mx-0 xl:gap-x-8">
           <Plan
             name="Starter"
-            price="$9"
+            price="$0"
             description="Good for anyone who is self-employed and just getting started."
             href="/register"
             features={[
@@ -148,8 +148,8 @@ export function Pricing() {
           />
           <Plan
             featured
-            name="Small business"
-            price="$15"
+            name="Contractor"
+            price="$50"
             description="Perfect for small / medium sized businesses."
             href="/register"
             features={[
@@ -163,8 +163,8 @@ export function Pricing() {
             ]}
           />
           <Plan
-            name="Enterprise"
-            price="$39"
+            name="Business"
+            price="$75"
             description="For even the biggest enterprise companies."
             href="/register"
             features={[

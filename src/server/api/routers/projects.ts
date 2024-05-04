@@ -38,6 +38,7 @@ export const projectsRouter = createTRPCRouter({
     }),
    update: protectedProcedure
       .input(z.object({
+         projectId: z.string().min(1),
          name: z.string().min(1),
          description: z.string().optional(),
          address: z.string().min(1),
@@ -47,7 +48,10 @@ export const projectsRouter = createTRPCRouter({
          country: z.string().min(1),
       }))
       .mutation(async ({ ctx, input }) => {
-         return ctx.db.project.create({
+         return ctx.db.project.update({
+            where: {
+              id: input.projectId,
+            },
             data: {
                name: input.name,
                ...input.description && { description: input.description },
@@ -234,7 +238,11 @@ export const projectsRouter = createTRPCRouter({
             },
          });
    }),
-   addTrade: protectedProcedure.input(z.object({ projectId: z.string().min(1), tradeId: z.string().min(1) })).mutation(({ ctx, input }) => {
+   addTrade: protectedProcedure.input(z.object({
+      projectId: z.string().min(1),
+      tradeId: z.string().min(1),
+      tasks: z.array(z.object({ description: z.string().min(1) })).optional()
+   })).mutation(({ ctx, input }) => {
       return ctx.db.tradeLineItems.create({
          data: {
             project: {
@@ -246,7 +254,8 @@ export const projectsRouter = createTRPCRouter({
                connect: {
                   id: input.tradeId,
                },
-            }
+            },
+            ...input.tasks && { tasks: { create: input.tasks } }
          }
       });
    }),
