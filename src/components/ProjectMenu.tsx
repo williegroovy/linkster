@@ -1,17 +1,26 @@
 'use client';
 
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
-import Link from 'next/link';
+import DeleteConfirmDialog from '~/components/DeleteConfirmDialog';
 
 function classNames(...classes: Array<string | boolean>) {
    return classes.filter(Boolean).join(' ')
 }
 
 export default function ProjectMenu({ projectName, projectId, deleteProject } : { projectName: string, projectId: string, deleteProject: (projectId: string) => void }) {
+   const [open, setOpen] = useState(false);
+
+   const confirmDelete = async () => {
+      await deleteProject(projectId);
+      setOpen(false);
+   }
+
    return (
-      <Menu as="div" className="relative flex-none">
+      <>
+         <DeleteConfirmDialog open={open} setOpen={setOpen} confirm={confirmDelete} name={'Project'} />
+         <Menu as="div" className="relative flex-none">
          <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
             <span className="sr-only">Open options</span>
             <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
@@ -29,10 +38,10 @@ export default function ProjectMenu({ projectName, projectId, deleteProject } : 
                <Menu.Item>
                   {({ active }) => (
                      <button
-                        onClick={() => deleteProject(projectId)}
+                        onClick={() => setOpen(true)}
                         className={classNames(
                            active ? 'bg-gray-50' : '',
-                           'block px-3 py-1 text-sm leading-6 text-gray-900'
+                           'w-full text-left block px-3 py-1 text-sm leading-6 text-gray-900'
                         )}
                      >
                         Delete<span className="sr-only">, {projectName}</span>
@@ -42,5 +51,6 @@ export default function ProjectMenu({ projectName, projectId, deleteProject } : 
             </Menu.Items>
          </Transition>
       </Menu>
+      </>
    )
 }

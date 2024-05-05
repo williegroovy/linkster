@@ -81,6 +81,11 @@ export const projectsRouter = createTRPCRouter({
          orderBy: { createdAt: "desc" },
          where: { contractor: { id: ctx.session.user.profile?.contractorProfile?.id } },
          include: {
+            chats: {
+               select: {
+                  id: true
+               }
+            },
             trades: {
                include: {
                   trade: true,

@@ -56,8 +56,6 @@ export default async function ProjectPage({ params, searchParams } : { params: {
             postalCode
          }
 
-         console.log('submit', name, description);
-
          await api.projects.update(projectUpdate);
 
          router.redirect(`/dashboard/projects/${params.projectId}`);
@@ -128,6 +126,11 @@ export default async function ProjectPage({ params, searchParams } : { params: {
             )}
          </DarkNavHeader>
          <DarkNavContainer>
+            <TradeSlideout formAction={createTrade} projectId={params.projectId} trades={trades}>
+               <button className="fixed bottom-4 right-4 rounded-full bg-indigo-600 p-4 text-white">
+                  <PlusIcon className="h-6 w-6" />
+               </button>
+            </TradeSlideout>
             <div className={'px-4 sm:px-6 lg:px-8'}>
                {/*<ProjectHeader project={project} isProjectOwner={isProjectOwner} />*/}
                <div className={'mt-10'}>

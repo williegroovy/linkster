@@ -35,6 +35,10 @@ export default function TradeSlideout({
       }
    }
 
+   const deleteTrade = (id: number) => {
+      setTasks(tasks.filter((_, index) => index !== id));
+   }
+
    const saveTrade = async () => {
       if(tradeId) {
          await formAction(tradeId, tasks);
@@ -130,26 +134,34 @@ export default function TradeSlideout({
                                                  aria-describedby="trade-task"
                                               />
                                           </div>
-                                          { tasks &&
-                                            <ul role="list" className="col-span-3 mb-10 divide-y divide-gray-100">
-                                               {tasks?.map(({ description }) => (
-                                                  <li key={description} className="flex items-center justify-between gap-x-6 py-1">
-                                                     <div className="min-w-0 flex items-center gap-3">
-                                                        <svg viewBox="0 0 2 2" className="h-1 w-1 fill-current">
-                                                           <circle cx={1} cy={1} r={1} />
-                                                        </svg>
-                                                        <div className="flex items-start gap-x-3">
-                                                           <p className="text-sm font-semibold leading-6 text-gray-900">{description}</p>
-                                                        </div>
-                                                     </div>
-                                                     <div className="flex flex-none items-center gap-x-4">
-                                                        {/*{ isProjectOwner && <DropdownMenu id={id} trade={trade} projectId={projectId} /> }*/}
-                                                     </div>
-                                                  </li>
-                                               ))}
-                                            </ul>
-                                          }
                                        </div>
+
+                                       { tasks.length > 0 &&
+                                         <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                           <fieldset>
+                                             <legend className="text-base font-semibold leading-6 text-gray-900">Tasks</legend>
+                                             <div className="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200">
+                                                {tasks.map(({ description }, idx) => (
+                                                   <div key={idx} className="relative flex items-start py-4">
+                                                      <div className="min-w-0 flex-1 text-sm leading-6">
+                                                         <label htmlFor={`task-${idx}`} className="select-none font-medium text-gray-900">
+                                                            {description}
+                                                         </label>
+                                                      </div>
+                                                      {/*<div className="ml-3 flex h-6 items-center">*/}
+                                                      {/*   <input*/}
+                                                      {/*      id={`task-${idx}`}*/}
+                                                      {/*      name={`task-${idx}`}*/}
+                                                      {/*      type="checkbox"*/}
+                                                      {/*      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"*/}
+                                                      {/*   />*/}
+                                                      {/*</div>*/}
+                                                   </div>
+                                                ))}
+                                             </div>
+                                           </fieldset>
+                                         </div>
+                                       }
 
                                        {/* Team members */}
                                        <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">

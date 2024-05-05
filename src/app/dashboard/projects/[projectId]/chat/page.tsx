@@ -70,7 +70,7 @@ export default async function ChatPage({ params, searchParams } : { params: { pr
                   <span className="xl:ml-3">
                   <AddTrade projectId={project.id} isProjectOwner={isProjectOwner} />
                </span>
-                  <HeaderMenu />
+                  <HeaderMenu projectId={project.id} isProjectOwner={isProjectOwner} />
                </div>
             )}
          </DarkNavHeader>

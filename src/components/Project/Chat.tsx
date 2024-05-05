@@ -1,5 +1,5 @@
 'use client';
-import { Fragment, useState, useRef, KeyboardEvent, FormEvent } from 'react';
+import { Fragment, useState, useRef, useEffect, KeyboardEvent, FormEvent } from 'react';
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import {
    FaceFrownIcon,
@@ -26,7 +26,7 @@ function classNames(...classes: Array<string | boolean | undefined>) {
    return classes.filter(Boolean).join(' ')
 }
 
-type Chat = {
+export type TChat = {
    id: string;
    activity: Array<{
       id: string;
@@ -52,9 +52,18 @@ type Chat = {
 
 export default function Chat({ chatId, image, initials } : { chatId: string, image?: string, initials?: string }) {
    const [selected, setSelected] = useState(moods[5]);
+   const messageEl = useRef(null);
    const formRef = useRef(null);
 
-   const { data: chat, refetch } = api.projects.getChat.useQuery({ chatId }, { refetchInterval: 5000, refetchIntervalInBackground: true });
+   const { data: chat, refetch } = api.projects.getChat.useQuery({ chatId }, { refetchInterval: 50000, refetchIntervalInBackground: true });
+
+   useEffect(() => {
+      if (messageEl && chat?.activity && chat.activity.length > 0) {
+         // @ts-ignore
+         messageEl.current.scrollTop = messageEl.current.scrollHeight;
+      }
+   }, [chat?.activity])
+
    const sendChat = api.projects.sendChat.useMutation({
       onSuccess: () => {
          refetch();
@@ -76,9 +85,9 @@ export default function Chat({ chatId, image, initials } : { chatId: string, ima
       }
    }
 
-   return chat && (
-      <div className={'max-h-screen'}>
-         <ul role="list" className="max-h-[80vh] space-y-6 overflow-y-auto">
+   return (
+      <div>
+         <ul ref={messageEl} role="list" className="max-h-[72vh] space-y-6 overflow-y-auto">
             {chat?.activity.map((activityItem, activityItemIdx) => (
                <li key={activityItem.id} className="relative flex gap-x-4">
                   <div
@@ -141,7 +150,8 @@ export default function Chat({ chatId, image, initials } : { chatId: string, ima
                <img
                   src={image}
                   alt=""
-                  className="h-6 w-6 flex-none rounded-full bg-gray-50"
+                  referrerPolicy="no-referrer"
+                  className="relative mt-3 h-6 w-6 flex-none rounded-full bg-gray-50"
                />
                : <div className="h-6 w-6 flex-none rounded-full bg-gray-50">
                   { initials ?? '' }
