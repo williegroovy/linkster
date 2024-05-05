@@ -290,7 +290,7 @@ export default async function ProjectsPage() {
                                     </dd>
                                  ))}
                               </div>
-                              <div className="flex w-16 gap-x-2.5">
+                              <div className="flex gap-x-2.5">
                                  <dt>
                                     <span className="sr-only">Chat</span>
                                     { project.chats?.[0]?.id &&
