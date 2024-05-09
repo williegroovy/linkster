@@ -7,7 +7,7 @@ import {
 
 
 export const betaSignup = createTRPCRouter({
-   betaSignup: publicProcedure.input(z.object({ email: z.string().min(1), plan: z.string().nullish() })).mutation(async ({ ctx, input }) => {
+   betaSignup: publicProcedure.input(z.object({ email: z.string().min(1), plan: z.string().nullable() })).mutation(async ({ ctx, input }) => {
       return ctx.db.signup.create({
          data: {
             email: input.email,
