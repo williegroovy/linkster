@@ -2,7 +2,7 @@ import { api } from '~/trpc/server';
 import router from 'next/navigation';
 
 export default function EarlyAccess({ searchParams } : { searchParams: { plan: string }}) {
-   const plan = searchParams.plan || 'unknown';
+   const plan = searchParams.plan || null;
 
    const createBetaSignup = async function(formData: FormData) {
       'use server'
@@ -10,8 +10,8 @@ export default function EarlyAccess({ searchParams } : { searchParams: { plan: s
       const email = formData.get('email') as string | null;
 
       if(email) {
-         await api.signup.betaSignup({ email });
-         router.redirect(`/early-access-success?email=${email}&plan=${plan}`);
+         await api.signup.betaSignup({ email, plan });
+         router.redirect(`/early-access-success`);
 
       }
 

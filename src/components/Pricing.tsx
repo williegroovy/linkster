@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 
+import Link from 'next/link'
 import { Button } from '~/components/Button'
 import { Container } from '~/components/Container'
 import classNames from 'classnames';
@@ -118,13 +119,13 @@ function Plan({
         </ul>
       }
       <Button
-        href={href}
+         href={`/early-access?plan=${name}`}
         variant={featured ? 'solid' : 'outline'}
         color="white"
         className="mt-8"
-        aria-label={`Get started with the ${name} plan for ${price}`}
+        aria-label={`Sign up for the beta today`}
       >
-        Sign up for the beta today
+        Sign up for 50% off at launch
       </Button>
     </section>
   )

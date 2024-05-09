@@ -237,8 +237,9 @@ model Profile {
 }
 
 model Signup {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  email String @unique
+  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  email String  @unique
+  plan  String?
 
   @@map("signups")
 }
