@@ -13,7 +13,11 @@ export default function EarlyAccess({ searchParams } : { searchParams: { plan: s
       const email = formData.get('email') as string | null;
 
       if(email) {
-         await betaSignup.mutateAsync({ email, plan });
+         try {
+            await betaSignup.mutateAsync({ email, plan });
+         } catch(err) {
+            console.error(err);
+         }
          setSuccess(true);
 
       }
