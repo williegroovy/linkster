@@ -13,13 +13,13 @@ function classNames(...classes: Array<string | boolean | undefined>) {
 type Contractor = {
    id: string
    profile: {
+      firstName: string,
+      lastName: string,
+      userId: string,
       user: {
-         id: string,
          email: string,
          image: string | null
       },
-      firstName: string,
-      lastName: string
    } | null;
 }
 

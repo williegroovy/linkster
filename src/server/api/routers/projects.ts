@@ -5,6 +5,11 @@ import {
   protectedProcedure,
 } from "~/server/api/trpc";
 
+const getLatLong = async function(address: string) {
+   const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`);
+   const json = await res.json();
+   return json.results[0].geometry.location;
+}
 
 export const projectsRouter = createTRPCRouter({
   create: protectedProcedure
@@ -18,21 +23,24 @@ export const projectsRouter = createTRPCRouter({
        country: z.string().min(1),
     }))
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.project.create({
-        data: {
-           name: input.name,
-           ...input.description && { description: input.description },
-           address: {
-              street: input.address,
-              city: input.city,
-              state: input.state,
-              postalCode: input.postalCode,
-              country: input.country,
-           },
-           chats: {
-              create: {},
-           },
-           contractor: { connect: { id: ctx.session.user.profile.contractorProfile.id } },
+       const chat = await ctx.db.chat.create({});
+
+       const fullAddress = `${input.address}, ${input.city}, ${input.state}, ${input.postalCode}, ${input.country}`;
+       const coords = await getLatLong(fullAddress);
+       return ctx.db.project.create({
+          data: {
+             name: input.name,
+             ...input.description && { description: input.description },
+             address: {
+                street: input.address,
+                city: input.city,
+                state: input.state,
+                postalCode: input.postalCode,
+                country: input.country,
+                coordinates: coords
+             },
+             chat: chat.id,
+             contractor: { connect: { id: ctx.session.user.profile.contractorProfile.id } },
         },
       });
     }),
@@ -48,6 +56,9 @@ export const projectsRouter = createTRPCRouter({
          country: z.string().min(1),
       }))
       .mutation(async ({ ctx, input }) => {
+         const fullAddress = `${input.address}, ${input.city}, ${input.state}, ${input.postalCode}, ${input.country}`;
+         const coords = await getLatLong(fullAddress);
+
          return ctx.db.project.update({
             where: {
               id: input.projectId,
@@ -61,9 +72,7 @@ export const projectsRouter = createTRPCRouter({
                   state: input.state,
                   postalCode: input.postalCode,
                   country: input.country,
-               },
-               chats: {
-                  create: {},
+                  coordinates: coords
                },
                contractor: { connect: { id: ctx.session.user.profile.contractorProfile.id } },
             },
@@ -81,11 +90,6 @@ export const projectsRouter = createTRPCRouter({
          orderBy: { createdAt: "desc" },
          where: { contractor: { id: ctx.session.user.profile?.contractorProfile?.id } },
          include: {
-            chats: {
-               select: {
-                  id: true
-               }
-            },
             trades: {
                include: {
                   trade: true,
@@ -112,6 +116,12 @@ export const projectsRouter = createTRPCRouter({
       return ctx.db.project.findUnique({
          where: { id: input.projectId },
          include: {
+            images: {
+               select: {
+                  id: true,
+                  url: true
+               }
+            },
             subContractors: {
                include: {
                   contractor: {
@@ -134,11 +144,6 @@ export const projectsRouter = createTRPCRouter({
                   },
                },
             },
-            chats: {
-               select: {
-                  id: true
-               },
-            },
             trades: {
                include: {
                   trade: true,
@@ -152,6 +157,9 @@ export const projectsRouter = createTRPCRouter({
          where: {
             id: {
                not: ctx.session.user.profile.contractorProfile.id,
+            },
+            NOT: {
+               profile: null
             }
          },
          select: {
@@ -325,17 +333,6 @@ export const projectsRouter = createTRPCRouter({
          }
       });
    }),
-   createChat: protectedProcedure.input(z.object({ projectId: z.string().min(1) })).mutation(async ({ ctx }) => {
-      return ctx.db.chat.create({
-         data: {
-            project: {
-               connect: {
-                  id: ctx.session.user.profile.contractorProfile.id,
-               },
-            },
-         },
-      });
-   }),
    sendMessage: protectedProcedure.input(z.object({ chatId: z.string().min(1), content: z.string().min(1) })).mutation(async ({ ctx, input }) => {
       return ctx.db.chatActivity.create({
          data: {
@@ -350,6 +347,18 @@ export const projectsRouter = createTRPCRouter({
                },
             },
             content: input.content
+         },
+      });
+   }),
+   addPhoto: protectedProcedure.input(z.object({ projectId: z.string().min(1), imageUrl: z.string().min(1) })).mutation(async ({ ctx, input }) => {
+      return ctx.db.projectPhoto.create({
+         data: {
+            project: {
+               connect: {
+                  id: input.projectId,
+               },
+            },
+            url: input.imageUrl,
          },
       });
    }),

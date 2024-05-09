@@ -37,6 +37,12 @@ const features = [
       'Easily export your data into an Excel spreadsheet where you can do whatever the hell you want with it.',
     image: screenshotReporting,
   },
+  {
+    title: 'Reporting',
+    description:
+       'Easily export your data into an Excel spreadsheet where you can do whatever the hell you want with it.',
+    image: screenshotReporting,
+  },
 ]
 
 export function PrimaryFeatures() {

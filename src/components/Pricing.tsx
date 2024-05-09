@@ -2,6 +2,7 @@ import clsx from 'clsx'
 
 import { Button } from '~/components/Button'
 import { Container } from '~/components/Container'
+import classNames from 'classnames';
 
 function SwirlyDoodle(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -53,16 +54,20 @@ function CheckIcon({
 function Plan({
   name,
   price,
+  discount,
   description,
   href,
   features,
+  coming,
   featured = false,
 }: {
   name: string
   price: string
+  discount?: string
   description: string
   href: string
   features: Array<string>
+  coming?: Array<string>
   featured?: boolean
 }) {
   return (
@@ -82,7 +87,7 @@ function Plan({
         {description}
       </p>
       <p className="order-first font-display text-5xl font-light tracking-tight text-white">
-        {price}
+        <span className={classNames(discount && 'line-through')}>{price}</span> { discount && discount }
       </p>
       <ul
         role="list"
@@ -98,6 +103,23 @@ function Plan({
           </li>
         ))}
       </ul>
+      { coming &&
+        <ul
+           role="list"
+           className={clsx(
+              'order-last mt-10 flex flex-col gap-y-3 text-sm',
+              featured ? 'text-white' : 'text-slate-200',
+           )}
+        >
+          <p className={'text-lg'}>Upcoming Features</p>
+          {coming && coming.map((feature) => (
+             <li key={feature} className="flex">
+               <CheckIcon className={featured ? 'text-white' : 'text-slate-400'} />
+               <span className="ml-4">{feature}</span>
+             </li>
+          ))}
+        </ul>
+      }
       <Button
         href={href}
         variant={featured ? 'solid' : 'outline'}
@@ -134,47 +156,65 @@ export function Pricing() {
         </div>
         <div className="-mx-4 mt-16 grid max-w-2xl grid-cols-1 gap-y-10 sm:mx-auto lg:-mx-8 lg:max-w-none lg:grid-cols-3 xl:mx-0 xl:gap-x-8">
           <Plan
-            name="Starter"
-            price="$0"
+             name="Connect"
+             price="0"
+             description="For even the biggest enterprise companies."
+             href="/register"
+             features={[
+               'Everything in lower tiers',
+               'Unlimited projects',
+               'Projects images upload (Up to 25 images per project)',
+             ]}
+          />
+          <Plan
+             featured
+            name="Connect Plus"
+            price="$50"
             description="Good for anyone who is self-employed and just getting started."
             href="/register"
             features={[
-              'Send 10 quotes and invoices',
-              'Connect up to 2 bank accounts',
-              'Track up to 15 expenses per month',
-              'Manual payroll support',
-              'Export up to 3 reports',
+               'Create 1 - 3 projects',
+               'Very limited photos per project',
+               'Can be added to projects as a subcontractor',
+               'Chat and manage your trades to projects you have been added to',
+               'Trades listed in our directory',
+               'Can find and bit on contracts',
+               'Consider giving 1 free project / offer 14 day trial without a credit card during project creation',
             ]}
+             coming={[
+                'Invoicing',
+                'CRM',
+             ]}
           />
           <Plan
-            featured
-            name="Contractor"
-            price="$50"
+            name="Connect Pro"
+            price="$100"
             description="Perfect for small / medium sized businesses."
             href="/register"
             features={[
-              'Send 25 quotes and invoices',
-              'Connect up to 5 bank accounts',
-              'Track up to 50 expenses per month',
-              'Automated payroll support',
-              'Export up to 12 reports',
-              'Bulk reconcile transactions',
-              'Track in multiple currencies',
+               'Everything from the Connect plan',
+               'Can create projects and add trade work orders to them',
+               'Chat with your trades / team in multiple languages automatically translated',
+               'Create 5 projects',
+               'Project Image Upload (Up to 5 - 10 images per project)',
+               'Create job posts and receive bids',
+               'Can save photos to your profile / showcase your work',
+               'Add up to X members to your team',
+               'Map integration'
             ]}
           />
-          <Plan
-            name="Business"
-            price="$75"
-            description="For even the biggest enterprise companies."
-            href="/register"
-            features={[
-              'Send unlimited quotes and invoices',
-              'Connect up to 15 bank accounts',
-              'Track up to 200 expenses per month',
-              'Automated payroll support',
-              'Export up to 25 reports, including TPS',
-            ]}
-          />
+          {/*<Plan*/}
+          {/*  name="Business"*/}
+          {/*  price="$100"*/}
+          {/*  discount="$50"*/}
+          {/*  description="For even the biggest enterprise companies."*/}
+          {/*  href="/register"*/}
+          {/*  features={[*/}
+          {/*    'Everything in lower tiers',*/}
+          {/*     'Unlimited projects',*/}
+          {/*     'Projects images upload (Up to 25 images per project)',*/}
+          {/*  ]}*/}
+          {/*/>*/}
         </div>
       </Container>
     </section>

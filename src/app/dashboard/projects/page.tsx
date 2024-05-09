@@ -6,10 +6,11 @@ import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
 import router from 'next/navigation'
 import ProjectSlideout from '~/components/Project/ProjectSlideout';
-import { ChatBubbleLeftIcon, CalendarIcon } from '@heroicons/react/24/outline'
+import { ChatBubbleLeftIcon, CalendarIcon, InformationCircleIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { getServerAuthSession } from '~/server/auth';
 import ChatSlideout from '~/components/ChatSlideout';
 import CalendarSlideout from '~/components/CalendarSlideout';
+import ProjectInfoSlideout from '~/components/Project/ProjectInfoSlideout';
 
 const discussions = [
    {
@@ -246,11 +247,13 @@ export default async function ProjectsPage() {
             )}
          </DarkNavHeader>
          <DarkNavContainer>
-            <ProjectSlideout formAction={createProject} >
-               <button className="fixed bottom-4 right-4 rounded-full bg-indigo-600 p-4 text-white">
-                  <PlusIcon className="h-6 w-6" />
-               </button>
-            </ProjectSlideout>
+            <div className={'md:hidden'}>
+               <ProjectSlideout formAction={createProject} >
+                  <button className="fixed bottom-4 right-4 rounded-full bg-indigo-600 p-4 text-white">
+                     <PlusIcon className="h-6 w-6" />
+                  </button>
+               </ProjectSlideout>
+            </div>
             { projects && projects.length > 0 ? (
                <div className={'px-4 sm:px-6 lg:px-8'}>
                   <ul role="list" className="divide-y divide-gray-100">
@@ -261,7 +264,7 @@ export default async function ProjectsPage() {
                         >
                            <div>
                               <p className="text-sm font-semibold leading-6 text-gray-900">
-                                 <Link href={`/dashboard/projects/${project.id}`} className="hover:underline">
+                                 <Link href={`/dashboard/projects/${project.id}`} className="underline md:no-underline	hover:underline">
                                     {project.name}
                                  </Link>
                               </p>
@@ -293,29 +296,24 @@ export default async function ProjectsPage() {
                               <div className="flex gap-x-2.5">
                                  <dt>
                                     <span className="sr-only">Chat</span>
-                                    { project.chats?.[0]?.id &&
-                                      <ChatSlideout initials={initials} imageUrl={serverSession?.user.image} chatId={project.chats?.[0]?.id}>
-                                          <ChatBubbleLeftIcon className="h-6 w-6 text-gray-400" aria-hidden="true" />
-                                       </ChatSlideout>
-                                    }
+                                    <ChatSlideout initials={initials} imageUrl={serverSession?.user.image} chatId={project.chat}>
+                                       <ChatBubbleLeftIcon className="h-6 w-6 text-gray-400" aria-hidden="true" />
+                                    </ChatSlideout>
                                  </dt>
-                                 <dd className="text-sm leading-6 text-gray-900">21</dd>
+                                 {/*<dt>*/}
+                                 {/*   <span className="sr-only">Calendar</span>*/}
+                                 {/*   <CalendarSlideout>*/}
+                                 {/*      <CalendarIcon className="h-6 w-6 text-gray-400" aria-hidden="true" />*/}
+                                 {/*   </CalendarSlideout>*/}
+                                 {/*</dt>*/}
                                  <dt>
-                                    <span className="sr-only">Calendar</span>
-                                    <CalendarSlideout>
-                                       <CalendarIcon className="h-6 w-6 text-gray-400" aria-hidden="true" />
-                                    </CalendarSlideout>
+                                    <span className="sr-only">Information</span>
+                                    <ProjectInfoSlideout project={project}>
+                                       <MapPinIcon className="h-6 w-6 flex-shrink-0 text-gray-400" aria-description={'project information'} />
+                                    </ProjectInfoSlideout>
                                  </dt>
                               </div>
                            </dl>
-                           {/*<dl className="flex w-full flex-none justify-between gap-x-8 sm:w-auto">*/}
-                           {/*   <div className="flex w-16 gap-x-2.5">*/}
-                           {/*      <dt>*/}
-                           {/*         <span className="sr-only">Calednar</span>*/}
-                           {/*         <CalendarIcon className="h-6 w-6 text-gray-400" aria-hidden="true" />*/}
-                           {/*      </dt>*/}
-                           {/*   </div>*/}
-                           {/*</dl>*/}
                         </li>
                      ))}
                   </ul>

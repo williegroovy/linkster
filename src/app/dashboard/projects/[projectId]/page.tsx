@@ -3,16 +3,17 @@ import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
 import TradeItems from '~/components/Project/TradeItems';
 import { getServerAuthSession } from '~/server/auth';
-import { CheckIcon, PencilIcon, PlusIcon } from '@heroicons/react/20/solid';
-import AddTrade from '~/components/Project/AddTrade';
+import { CheckIcon, PlusIcon } from '@heroicons/react/20/solid';
 import HeaderMenu from '~/components/Project/HeaderMenu';
 import Link from 'next/link';
-import { InformationCircleIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, ChatBubbleLeftIcon, InformationCircleIcon, MapPinIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import { ChevronLeftIcon } from '@heroicons/react/20/solid';
-import IconPopOver from '~/components/IconPopover';
 import ProjectSlideout from '~/components/Project/ProjectSlideout';
 import router from 'next/navigation';
 import TradeSlideout from '~/components/Project/Trade/TradeSlideout';
+import ProjectInfoSlideout from '~/components/Project/ProjectInfoSlideout';
+import ChatSlideout from '~/components/ChatSlideout';
+import PhotoSlideout from '~/components/Project/PhotoSlideout';
 
 export default async function ProjectPage({ params, searchParams } : { params: { projectId: string }, searchParams?: { [key: string]: string } }) {
    const serverSession = await getServerAuthSession();
@@ -32,6 +33,18 @@ export default async function ProjectPage({ params, searchParams } : { params: {
       'use server'
       await api.projects.addTrade({ projectId: params.projectId, tradeId, tasks });
    };
+
+   // const getLatLong = async function(address: string) {
+   //    const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`);
+   //    const json = await res.json();
+   //    console.log('json', json.results[0].geometry.location);
+   //    return json.results[0].geometry.location;
+   // }
+
+   // console.log('addressString', addressString);
+   // if(addressString) {
+   //    getLatLong(addressString).then(console.log).catch(console.error);
+   // }
 
    const updateProject = async function(formData: FormData) {
       'use server'
@@ -72,31 +85,57 @@ export default async function ProjectPage({ params, searchParams } : { params: {
                      <ChevronLeftIcon className="h-6 w-6 text-gray-800" />
                   </Link>
                   <h1 className="text-base font-semibold leading-7 text-indigo-600">{project.name}</h1>
-                  <div className="hidden md:flex order-last flex w-full gap-x-8 text-sm font-semibold leading-6 sm:order-none sm:w-auto sm:border-l sm:border-gray-200 sm:pl-6 sm:leading-7">
-                     <Link href={`/dashboard/projects/${params.projectId}/chat`} className="text-gray-700">
-                        Chat
-                     </Link>
-                     <Link href={`/dashboard/projects/${params.projectId}/calendar`} className="text-gray-700">
-                        Calendar
-                     </Link>
-                     <Link href={`/dashboard/projects/${params.projectId}/subcontractors`} className="text-gray-700">
-                        Subcontractors
-                     </Link>
+                  <div className={'hidden md:flex gap-x-2'}>
+                     {/*<ProjectInfoSlideout project={project}>*/}
+                     {/*   <InformationCircleIcon className="h-6 w-6 flex-shrink-0 text-gray-600" aria-description={'project information'} />*/}
+                     {/*</ProjectInfoSlideout>*/}
+                     <ProjectInfoSlideout project={project}>
+                        <MapPinIcon className="h-6 w-6 flex-shrink-0 text-gray-600" aria-description={'project information'} />
+                     </ProjectInfoSlideout>
+                     { /* TODO: Update to photo slide out, or add some other UI */ }
+                     { isProjectOwner &&
+                        <PhotoSlideout projectId={project.id} images={project.images}>
+                           <PhotoIcon className="h-6 w-6 flex-shrink-0 text-gray-600" aria-description={'project photos'} />
+                        </PhotoSlideout>
+                     }
                   </div>
+                  {/*<div className="hidden md:flex order-last flex w-full gap-x-8 text-sm font-semibold leading-6 sm:order-none sm:w-auto sm:border-l sm:border-gray-200 sm:pl-6 sm:leading-7">*/}
+                  {/*   <Link href={`/dashboard/projects/${params.projectId}/chat`} className="text-gray-700">*/}
+                  {/*      Chat*/}
+                  {/*   </Link>*/}
+                  {/*   <Link href={`/dashboard/projects/${params.projectId}/calendar`} className="text-gray-700">*/}
+                  {/*      Calendar*/}
+                  {/*   </Link>*/}
+                  {/*   <Link href={`/dashboard/projects/${params.projectId}/subcontractors`} className="text-gray-700">*/}
+                  {/*      Subcontractors*/}
+                  {/*   </Link>*/}
+                  {/*</div>*/}
                </div>
                <div className={'flex flex-wrap w-full gap-x-2 mt-2 md:gap-x-4 text-xs'}>
-                  <IconPopOver icon={<InformationCircleIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />}>
-                     <h2 className="mb-3 text-sm font-semibold leading-6 text-gray-900">Project Description</h2>
+                  <p className={'text-md text-gray-600'}>
                      {project.description ?? 'No description'}
-                  </IconPopOver>
-                  <IconPopOver icon={<MapPinIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />}>
-                     <h2 className="mb-3 text-sm font-semibold leading-6 text-gray-900">Project Address</h2>
-                     {project?.address?.street}, {project?.address?.city}, {project?.address?.state} {project?.address?.postalCode}
-                  </IconPopOver>
+                  </p>
                </div>
             </div>
+
+            <div className="flex md:hidden divide-y divide-gray-100 gap-x-4 md:mt-5 2xl:ml-4 2xl:mt-0">
+               <ProjectInfoSlideout project={project}>
+                  <MapPinIcon className="h-8 w-8 flex-shrink-0 text-gray-600" aria-description={'project information'} />
+               </ProjectInfoSlideout>
+               <ChatSlideout initials={initials} imageUrl={serverSession?.user.image} chatId={project.chat}>
+                  <ChatBubbleLeftIcon className="h-8 w-8 flex-shrink-0 text-gray-600" aria-hidden="true" />
+               </ChatSlideout>
+               { /* TODO: Update to photo slide out, or add some other UI */ }
+               <PhotoSlideout projectId={project.id} images={project.images}>
+                  <PhotoIcon className="h-8 w-8 flex-shrink-0 text-gray-600" aria-description={'project photos'} />
+               </PhotoSlideout>
+               <ProjectSlideout formAction={updateProject} formData={project}>
+                  <PencilIcon className="h-8 w-8 flex-shrink-0 text-gray-600" aria-hidden="true" />
+               </ProjectSlideout>
+            </div>
+
             { isProjectOwner && (
-               <div className="divide-y divide-gray-100 md:mt-5 flex 2xl:ml-4 2xl:mt-0">
+               <div className="hidden md:flex divide-y divide-gray-100 md:mt-5 2xl:ml-4 2xl:mt-0">
                   <span className="ml-3">
                      <TradeSlideout formAction={createTrade} projectId={params.projectId} trades={trades}>
                         <button
@@ -126,11 +165,13 @@ export default async function ProjectPage({ params, searchParams } : { params: {
             )}
          </DarkNavHeader>
          <DarkNavContainer>
-            <TradeSlideout formAction={createTrade} projectId={params.projectId} trades={trades}>
-               <button className="fixed bottom-4 right-4 rounded-full bg-indigo-600 p-4 text-white">
-                  <PlusIcon className="h-6 w-6" />
-               </button>
-            </TradeSlideout>
+            <div className={'md:hidden'}>
+               <TradeSlideout formAction={createTrade} projectId={params.projectId} trades={trades}>
+                  <button className="fixed bottom-4 right-4 rounded-full bg-indigo-600 p-4 text-white">
+                     <PlusIcon className="h-6 w-6" />
+                  </button>
+               </TradeSlideout>
+            </div>
             <div className={'px-4 sm:px-6 lg:px-8'}>
                {/*<ProjectHeader project={project} isProjectOwner={isProjectOwner} />*/}
                <div className={'mt-10'}>

@@ -7,7 +7,7 @@ const navigation = [
    { name: 'Dashboard', href: '/dashboard', current: true },
    { name: 'Team', href: '/dashboard/team', current: false },
    { name: 'Projects', href: '/dashboard/projects', current: false },
-   { name: 'Calendar', href: '/dashboard/calendar', current: false },
+   // { name: 'Calendar', href: '/dashboard/calendar', current: false },
 ]
 const userNavigation = [
    { name: 'Your Profile', href: '/profile' },

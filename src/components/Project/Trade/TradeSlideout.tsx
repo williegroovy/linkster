@@ -4,7 +4,10 @@ import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { PlusIcon } from '@heroicons/react/20/solid'
 import TradeComboBox from '~/components/Project/Trade/TradeComboBox';
+import TeamCombobox from '~/components/Team/TeamCombobox';
 import { useRouter } from 'next/navigation';
+import { api } from '~/trpc/react';
+import { UploadDropzone } from '~/components/uploadthing';
 
 export default function TradeSlideout({
    children,
@@ -15,17 +18,24 @@ export default function TradeSlideout({
    children: ReactElement,
    formAction: (tradeId: string, tasks: Array<{ description: string}>) => void,
    projectId: string,
-   trades: Array<{ name: string, id: string
-}> }) {
+   trades: Array<{ name: string, id: string }>
+}) {
    const router = useRouter();
    const [open, setOpen] = useState(false);
+   const [addSub, setAddSub] = useState(false);
    const [tradeId, setTradeId] = useState<string | null>(null);
    const [tasks, setTasks] = useState<Array<{ description: string }>>([]);
    const [description, setDescription] = useState<string>('');
 
+   const { data: contractors } = api.projects.listContractors.useQuery();
+
    const toggle = () => {
       setOpen(!open);
       setTasks([]);
+   }
+
+   const toggleAddSub = () => {
+      setAddSub(!addSub);
    }
 
    const handleOnKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
@@ -172,6 +182,7 @@ export default function TradeSlideout({
                                              <div className="flex space-x-2">
                                                 <button
                                                    type="button"
+                                                   onClick={toggleAddSub}
                                                    className="relative inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                 >
                                                    <span className="absolute -inset-2" />
@@ -180,6 +191,7 @@ export default function TradeSlideout({
                                                 </button>
                                              </div>
                                           </div>
+                                          { addSub && contractors && <TeamCombobox contractors={contractors} selected={[]} type={'subcontractor'} /> }
                                        </div>
                                     </div>
                                  </div>

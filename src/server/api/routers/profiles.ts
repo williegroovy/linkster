@@ -5,6 +5,12 @@ import {
    protectedProcedure,
 } from "~/server/api/trpc";
 
+const getLatLong = async function(address: string) {
+   const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`);
+   const json = await res.json();
+   return json.results[0].geometry.location;
+}
+
 export const profilesRouter = createTRPCRouter({
    setOnboarded: protectedProcedure.mutation(async ({ ctx }) => {
       return ctx.db.profile.update({
@@ -27,6 +33,9 @@ export const profilesRouter = createTRPCRouter({
          country: z.string().min(1),
       }))
       .mutation(async ({ ctx, input }) => {
+         const address = `${input.street} ${input.city} ${input.state} ${input.postalCode} ${input.country}`;
+         const coords = await getLatLong(address);
+
          return ctx.db.profile.create({
             data: {
                user: { connect: { id: ctx.session.user.id } },
@@ -38,6 +47,7 @@ export const profilesRouter = createTRPCRouter({
                   state: input.state,
                   postalCode: input.postalCode,
                   country: input.country,
+                  coordinates: coords,
                },
             }
          })
@@ -54,6 +64,9 @@ export const profilesRouter = createTRPCRouter({
          country: z.string().min(1).optional(),
       }))
       .mutation(async ({ ctx, input }) => {
+         const address = `${input.street} ${input.city} ${input.state} ${input.postalCode} ${input.country}`;
+         const coords = await getLatLong(address);
+
          if (input.street && input.city && input.state && input.postalCode && input.country) {
             return ctx.db.profile.update({
                where: {
@@ -68,6 +81,7 @@ export const profilesRouter = createTRPCRouter({
                      state: input.state,
                      postalCode: input.postalCode,
                      country: input.country,
+                     coordinates: coords,
                   },
                }
             })
@@ -93,6 +107,13 @@ export const profilesRouter = createTRPCRouter({
          country: z.string().min(1).optional(),
       }))
       .mutation(async ({ ctx, input }) => {
+         let coords = null;
+
+         if(input.street && input.city && input.state && input.postalCode && input.country) {
+            const address = `${input.street} ${input.city} ${input.state} ${input.postalCode} ${input.country}`;
+            coords = await getLatLong(address);
+         }
+
          if(input.street && input.city && input.state && input.postalCode && input.country) {
             return ctx.db.contractor.create({
                data: {
@@ -104,6 +125,7 @@ export const profilesRouter = createTRPCRouter({
                      state: input.state,
                      postalCode: input.postalCode,
                      country: input.country,
+                     ...coords && { coordinates: coords },
                   },
                }
             })
@@ -153,6 +175,9 @@ export const profilesRouter = createTRPCRouter({
          country: z.string().min(1)
       }))
       .mutation(async ({ ctx, input }) => {
+         const address = `${input.city} ${input.state} ${input.postalCode} ${input.country}`;
+         const coords = await getLatLong(address);
+
          return ctx.db.contractor.update({
             where: {
                id: ctx.session.user.profile.contractorProfile.id,
@@ -167,6 +192,7 @@ export const profilesRouter = createTRPCRouter({
                         state: input.state,
                         postalCode: input.postalCode,
                         country: input.country,
+                        coordinates: coords,
                      },
                   }
                }
@@ -203,7 +229,11 @@ export const profilesRouter = createTRPCRouter({
             }))
       }))
       .mutation(async ({ ctx, input }) => {
+
          return Promise.allSettled(input.serviceAreas.map(async (serviceArea) => {
+            const address = `${serviceArea.city} ${serviceArea.state} ${serviceArea.postalCode} ${serviceArea.country}`;
+            const coords = await getLatLong(address);
+
             return ctx.db.contractor.update({
                where: {
                   id: ctx.session.user.profile.contractorProfile.id,
@@ -218,6 +248,7 @@ export const profilesRouter = createTRPCRouter({
                            state: serviceArea.state,
                            postalCode: serviceArea.postalCode,
                            country: serviceArea.country,
+                           coordinates: coords,
                         },
                      }
                   }
