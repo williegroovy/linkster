@@ -20,9 +20,9 @@ export default async function Home() {
       <main>
          <Hero />
          <PrimaryFeatures />
-         <SecondaryFeatures />
+         {/*<SecondaryFeatures />*/}
          {/*<BetaCard />*/}
-         <CallToAction />
+         {/*<CallToAction />*/}
          {/*<Testimonials />*/}
          <Pricing />
          <Faqs />

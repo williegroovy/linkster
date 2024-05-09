@@ -64,7 +64,7 @@ function Plan({
   name: string
   price: string
   discount?: string
-  description: string
+  description?: string
   href: string
   features: Array<string>
   coming?: Array<string>
@@ -78,14 +78,11 @@ function Plan({
       )}
     >
       <h3 className="mt-5 font-display text-lg text-white">{name}</h3>
-      <p
-        className={clsx(
-          'mt-2 text-base',
-          featured ? 'text-white' : 'text-slate-400',
-        )}
-      >
-        {description}
-      </p>
+       { description &&
+         <p className={clsx('mt-2 text-base', featured ? 'text-white' : 'text-slate-400')}>
+            {description}
+         </p>
+       }
       <p className="order-first font-display text-5xl font-light tracking-tight text-white">
         <span className={classNames(discount && 'line-through')}>{price}</span> { discount && discount }
       </p>
@@ -127,7 +124,7 @@ function Plan({
         className="mt-8"
         aria-label={`Get started with the ${name} plan for ${price}`}
       >
-        Get started
+        Sign up for the beta today
       </Button>
     </section>
   )
@@ -150,57 +147,52 @@ export function Pricing() {
             for everyone.
           </h2>
           <p className="mt-4 text-lg text-slate-400">
-            It doesn’t matter what size your business is, our software won’t
-            work well for you.
+            Sign up today for early access and 50% discount on all plans.
           </p>
         </div>
         <div className="-mx-4 mt-16 grid max-w-2xl grid-cols-1 gap-y-10 sm:mx-auto lg:-mx-8 lg:max-w-none lg:grid-cols-3 xl:mx-0 xl:gap-x-8">
           <Plan
              name="Connect"
-             price="0"
-             description="For even the biggest enterprise companies."
+             price="$0"
              href="/register"
              features={[
-               'Everything in lower tiers',
-               'Unlimited projects',
-               'Projects images upload (Up to 25 images per project)',
+                'Join projects as a subcontractor or team member',
+             ]}
+             coming={[
+                'Connect with contractors in your area',
+                'Mobile App'
              ]}
           />
           <Plan
-             featured
+            featured
             name="Connect Plus"
             price="$50"
-            description="Good for anyone who is self-employed and just getting started."
             href="/register"
             features={[
-               'Create 1 - 3 projects',
-               'Very limited photos per project',
-               'Can be added to projects as a subcontractor',
-               'Chat and manage your trades to projects you have been added to',
-               'Trades listed in our directory',
-               'Can find and bit on contracts',
-               'Consider giving 1 free project / offer 14 day trial without a credit card during project creation',
-            ]}
+               'Everything in Connect plan',
+               'Create and manage up to 5 projects',
+               'Project Image Upload (Up to 5 images per project)',
+               'Chat with subcontracts in multiple languages in real-time',
+               'Manage trades hassle-free',
+               'Unlimited tradesmen and team members',
+               ]}
              coming={[
-                'Invoicing',
                 'CRM',
+                'Estimate, bid, mange, and invoice contracts with ease',
+                'Promote your projects and find tradesmen quickly on the Linkster network',
              ]}
           />
           <Plan
             name="Connect Pro"
             price="$100"
-            description="Perfect for small / medium sized businesses."
             href="/register"
             features={[
-               'Everything from the Connect plan',
-               'Can create projects and add trade work orders to them',
-               'Chat with your trades / team in multiple languages automatically translated',
-               'Create 5 projects',
-               'Project Image Upload (Up to 5 - 10 images per project)',
-               'Create job posts and receive bids',
-               'Can save photos to your profile / showcase your work',
-               'Add up to X members to your team',
-               'Map integration'
+               'Everything from the Connect Plus plan',
+               'Unlimited projects',
+               'Project Image Upload (Up to 25 images per project)',
+            ]}
+            coming={[
+               'Increase the visibility of your business with major retailers like Target and Walmart',
             ]}
           />
           {/*<Plan*/}
