@@ -114,34 +114,34 @@ export function Header({ signedIn }: { signedIn: boolean }) {
               <NavLink href="#pricing">Pricing</NavLink>
             </div>
           </div>
-          <div className="flex items-center gap-x-5 md:gap-x-8">
-            { !signedIn ? (
-               <>
-                  <div className="hidden md:block">
-                    <NavLink href="/login">Sign in</NavLink>
-                  </div>
-                  <Button href="/register" color="blue">
-                    <span>
-                      Get started <span className="hidden lg:inline">today</span>
-                    </span>
-                  </Button>
-                 </>
-              ) : (
-                 <>
-                   <div className="hidden md:block">
-                     <NavLink href="/dashboard">Dashboard</NavLink>
-                   </div>
-                    <Button type={'button'} onClick={() => signOut()} color="blue">
-                      <span>
-                        Sign out
-                      </span>
-                    </Button>
-                 </>
-              )}
-            <div className="-mr-1 md:hidden">
-              <MobileNavigation />
-            </div>
-          </div>
+          {/*<div className="flex items-center gap-x-5 md:gap-x-8">*/}
+          {/*  { !signedIn ? (*/}
+          {/*     <>*/}
+          {/*        <div className="hidden md:block">*/}
+          {/*          <NavLink href="/login">Sign in</NavLink>*/}
+          {/*        </div>*/}
+          {/*        <Button href="/register" color="blue">*/}
+          {/*          <span>*/}
+          {/*            Get started <span className="hidden lg:inline">today</span>*/}
+          {/*          </span>*/}
+          {/*        </Button>*/}
+          {/*       </>*/}
+          {/*    ) : (*/}
+          {/*       <>*/}
+          {/*         <div className="hidden md:block">*/}
+          {/*           <NavLink href="/dashboard">Dashboard</NavLink>*/}
+          {/*         </div>*/}
+          {/*          <Button type={'button'} onClick={() => signOut()} color="blue">*/}
+          {/*            <span>*/}
+          {/*              Sign out*/}
+          {/*            </span>*/}
+          {/*          </Button>*/}
+          {/*       </>*/}
+          {/*    )}*/}
+          {/*  <div className="-mr-1 md:hidden">*/}
+          {/*    <MobileNavigation />*/}
+          {/*  </div>*/}
+          {/*</div>*/}
 
         </nav>
       </Container>
