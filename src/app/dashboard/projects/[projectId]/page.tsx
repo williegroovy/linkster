@@ -6,7 +6,7 @@ import { getServerAuthSession } from '~/server/auth';
 import { CheckIcon, PlusIcon } from '@heroicons/react/20/solid';
 import HeaderMenu from '~/components/Project/HeaderMenu';
 import Link from 'next/link';
-import { PencilIcon, ChatBubbleLeftIcon, InformationCircleIcon, MapPinIcon, PhotoIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, ChatBubbleLeftIcon, TrashIcon, MapPinIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import { ChevronLeftIcon } from '@heroicons/react/20/solid';
 import ProjectSlideout from '~/components/Project/ProjectSlideout';
 import router from 'next/navigation';
@@ -14,6 +14,7 @@ import TradeSlideout from '~/components/Project/Trade/TradeSlideout';
 import ProjectInfoSlideout from '~/components/Project/ProjectInfoSlideout';
 import ChatSlideout from '~/components/ChatSlideout';
 import PhotoSlideout from '~/components/Project/PhotoSlideout';
+import DeleteConfirmation from '~/components/Project/DeleteConfirmation';
 
 export default async function ProjectPage({ params, searchParams } : { params: { projectId: string }, searchParams?: { [key: string]: string } }) {
    const serverSession = await getServerAuthSession();
@@ -34,17 +35,12 @@ export default async function ProjectPage({ params, searchParams } : { params: {
       await api.projects.addTrade({ projectId: params.projectId, tradeId, tasks });
    };
 
-   // const getLatLong = async function(address: string) {
-   //    const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`);
-   //    const json = await res.json();
-   //    console.log('json', json.results[0].geometry.location);
-   //    return json.results[0].geometry.location;
-   // }
+   const onDeleteProject = async (projectId: string) => {
+      'use server';
+      await api.projects.delete({ projectId });
+      router.redirect('/dashboard/projects');
+   }
 
-   // console.log('addressString', addressString);
-   // if(addressString) {
-   //    getLatLong(addressString).then(console.log).catch(console.error);
-   // }
 
    const updateProject = async function(formData: FormData) {
       'use server'
@@ -92,6 +88,9 @@ export default async function ProjectPage({ params, searchParams } : { params: {
                      <ProjectInfoSlideout project={project}>
                         <MapPinIcon className="h-6 w-6 flex-shrink-0 text-gray-600" aria-description={'project information'} />
                      </ProjectInfoSlideout>
+                     <ChatSlideout initials={initials} imageUrl={serverSession?.user.image} chatId={project.chat}>
+                        <ChatBubbleLeftIcon className="h-6 w-6 flex-shrink-0 text-gray-600" aria-hidden="true" />
+                     </ChatSlideout>
                      { /* TODO: Update to photo slide out, or add some other UI */ }
                      { isProjectOwner &&
                         <PhotoSlideout projectId={project.id} images={project.images}>
@@ -132,6 +131,10 @@ export default async function ProjectPage({ params, searchParams } : { params: {
                <ProjectSlideout formAction={updateProject} formData={project}>
                   <PencilIcon className="h-8 w-8 flex-shrink-0 text-gray-600" aria-hidden="true" />
                </ProjectSlideout>
+               <DeleteConfirmation id={project.id} name={'Project'} onDelete={onDeleteProject}>
+                  <TrashIcon className="h-8 w-8 flex-shrink-0 text-gray-600" aria-hidden="true" />
+               </DeleteConfirmation>
+
             </div>
 
             { isProjectOwner && (
@@ -157,6 +160,17 @@ export default async function ProjectPage({ params, searchParams } : { params: {
                            Edit
                         </button>
                      </ProjectSlideout>
+                     </span>
+                  <span className="ml-3 hidden md:block">
+                     <DeleteConfirmation id={project.id} name={'Project'} onDelete={onDeleteProject}>
+                        <button
+                           type="button"
+                           className="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-500"
+                        >
+                           <TrashIcon className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-100" aria-hidden="true" />
+                           Delete
+                        </button>
+                     </DeleteConfirmation>
                   </span>
                   <div className={'mt-2 md:mt-0 border-none'}>
                      <HeaderMenu projectId={params.projectId} isProjectOwner={isProjectOwner} />

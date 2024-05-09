@@ -1,16 +1,15 @@
 import { PlusIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link';
 import { api } from '~/trpc/server';
-import ProjectMenu from '~/components/ProjectMenu';
 import DarkNavContainer from '~/components/DarkNav/Container';
 import DarkNavHeader from '~/components/DarkNav/Header';
 import router from 'next/navigation'
 import ProjectSlideout from '~/components/Project/ProjectSlideout';
-import { ChatBubbleLeftIcon, CalendarIcon, InformationCircleIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { ChatBubbleLeftIcon, TrashIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { getServerAuthSession } from '~/server/auth';
 import ChatSlideout from '~/components/ChatSlideout';
-import CalendarSlideout from '~/components/CalendarSlideout';
 import ProjectInfoSlideout from '~/components/Project/ProjectInfoSlideout';
+import DeleteConfirmation from '~/components/Project/DeleteConfirmation';
 
 const discussions = [
    {
@@ -300,17 +299,17 @@ export default async function ProjectsPage() {
                                        <ChatBubbleLeftIcon className="h-6 w-6 text-gray-400" aria-hidden="true" />
                                     </ChatSlideout>
                                  </dt>
-                                 {/*<dt>*/}
-                                 {/*   <span className="sr-only">Calendar</span>*/}
-                                 {/*   <CalendarSlideout>*/}
-                                 {/*      <CalendarIcon className="h-6 w-6 text-gray-400" aria-hidden="true" />*/}
-                                 {/*   </CalendarSlideout>*/}
-                                 {/*</dt>*/}
                                  <dt>
                                     <span className="sr-only">Information</span>
                                     <ProjectInfoSlideout project={project}>
                                        <MapPinIcon className="h-6 w-6 flex-shrink-0 text-gray-400" aria-description={'project information'} />
                                     </ProjectInfoSlideout>
+                                 </dt>
+                                 <dt>
+                                    <span className="sr-only">Delete Project</span>
+                                    <DeleteConfirmation id={project.id} name={'Project'} onDelete={onDeleteProject}>
+                                       <TrashIcon className="h-6 w-6 text-gray-400" aria-hidden="true" />
+                                    </DeleteConfirmation>
                                  </dt>
                               </div>
                            </dl>

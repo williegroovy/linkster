@@ -3,6 +3,8 @@ import { cloneElement, ReactElement, Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { LinkIcon, PlusIcon, QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
+import TeamCombobox from '~/components/Team/TeamCombobox';
+import { api } from '~/trpc/react';
 
 const team = [
    {
@@ -55,6 +57,13 @@ type ProjectData = {
 
 export default function ProjectSlideout({ children, formData, formAction } : { children: ReactElement, formData?: ProjectData, formAction: (formData: FormData) => void }) {
    const [open, setOpen] = useState(false);
+   const [addSub, setAddSub] = useState(false);
+
+   const { data: contractors } = api.projects.listContractors.useQuery();
+
+   const toggleAddSub = () => {
+      setAddSub(!addSub);
+   }
 
    const toggle = () => {
       setOpen(!open);
@@ -238,28 +247,15 @@ export default function ProjectSlideout({ children, formData, formAction } : { c
                                        </div>
 
                                        {/* Team members */}
-                                       <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                       <div className="space-y-2 px-4 sm:grid sm:items-center sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                           <div>
-                                             <h3 className="text-sm font-medium leading-6 text-gray-900">Team Members</h3>
+                                             <h3 className="text-sm font-medium leading-6 text-gray-900">Subcontractor</h3>
                                           </div>
                                           <div className="sm:col-span-2">
                                              <div className="flex space-x-2">
-                                                {team.map((person) => (
-                                                   <a
-                                                      key={person.email}
-                                                      href={person.href}
-                                                      className="flex-shrink-0 rounded-full hover:opacity-75"
-                                                   >
-                                                      <img
-                                                         className="inline-block h-8 w-8 rounded-full"
-                                                         src={person.imageUrl}
-                                                         alt={person.name}
-                                                      />
-                                                   </a>
-                                                ))}
-
                                                 <button
                                                    type="button"
+                                                   onClick={toggleAddSub}
                                                    className="relative inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                 >
                                                    <span className="absolute -inset-2" />
@@ -268,6 +264,7 @@ export default function ProjectSlideout({ children, formData, formAction } : { c
                                                 </button>
                                              </div>
                                           </div>
+                                          { addSub && contractors && <TeamCombobox contractors={contractors} selected={[]} type={'subcontractor'} /> }
                                        </div>
                                     </div>
                                  </div>
@@ -289,6 +286,7 @@ export default function ProjectSlideout({ children, formData, formAction } : { c
                                           { formData ? 'Save' : 'Create' }
                                        </button>
                                     </div>
+                                    { addSub && contractors && <TeamCombobox contractors={contractors} selected={[]} type={'subcontractor'} /> }
                                  </div>
                               </form>
                            </Dialog.Panel>
