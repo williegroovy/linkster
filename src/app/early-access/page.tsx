@@ -2,7 +2,7 @@ import { api } from '~/trpc/server';
 import router from 'next/navigation';
 
 export default function EarlyAccess({ searchParams } : { searchParams: { plan: string }}) {
-   const plan = searchParams.plan || null;
+   const plan = searchParams.plan || 'unknown';
 
    const createBetaSignup = async function(formData: FormData) {
       'use server'
