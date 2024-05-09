@@ -4,9 +4,10 @@ import {
    createTRPCRouter,
    protectedProcedure,
 } from "~/server/api/trpc";
+import { env } from '~/env'
 
 const getLatLong = async function(address: string) {
-   const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`);
+   const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`);
    const json = await res.json();
    return json.results[0].geometry.location;
 }
