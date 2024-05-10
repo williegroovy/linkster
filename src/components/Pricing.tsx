@@ -58,6 +58,7 @@ function Plan({
   discount,
   description,
   href,
+   cta,
   features,
   coming,
   featured = false,
@@ -67,6 +68,7 @@ function Plan({
   discount?: string
   description?: string
   href: string
+   cta: string
   features: Array<string>
   coming?: Array<string>
   featured?: boolean
@@ -125,7 +127,7 @@ function Plan({
         className="mt-8"
         aria-label={`Sign up for the beta today`}
       >
-        Sign up for 50% off at launch
+         {cta}
       </Button>
     </section>
   )
@@ -156,11 +158,12 @@ export function Pricing() {
              name="Connect"
              price="$0"
              href="/register"
+             cta={'Sign up for free'}
              features={[
                 'Join projects as a subcontractor or team member',
              ]}
              coming={[
-                'Connect with contractors in your area',
+                'Connect with contractors, share resources, and grow your network',
                 'Mobile App'
              ]}
           />
@@ -169,17 +172,18 @@ export function Pricing() {
             name="Connect Plus"
             price="$50"
             href="/register"
+            cta={'Sign up for 50% off a launch'}
             features={[
                'Everything in Connect plan',
                'Create and manage up to 5 projects',
-               'Project Image Upload (Up to 5 images per project)',
+               'Project Image Upload (Up to 10 images per project)',
                'Chat with subcontracts in multiple languages in real-time',
-               'Manage trades hassle-free',
-               'Unlimited tradesmen and team members',
+               'Manage trades hassle-free with unlimited tradesmen and team members',
                ]}
              coming={[
-                'CRM',
+                'CRM to simplify customer management and pipelines',
                 'Estimate, bid, mange, and invoice contracts with ease',
+                'Find trusted subcontractors, share resources, and grow your network',
                 'Promote your projects and find tradesmen quickly on the Linkster network',
              ]}
           />
@@ -187,10 +191,10 @@ export function Pricing() {
             name="Connect Pro"
             price="$100"
             href="/register"
+            cta={'Sign up for 50% off a launch'}
             features={[
                'Everything from the Connect Plus plan',
-               'Unlimited projects',
-               'Project Image Upload (Up to 25 images per project)',
+               'Unlimited projects and image upload',
             ]}
             coming={[
                'Increase the visibility of your business with major retailers like Target and Walmart',

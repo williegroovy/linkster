@@ -14,33 +14,30 @@ import screenshotVatReturns from '~/images/screenshots/vat-returns.png'
 
 const features = [
   {
-    title: 'Payroll',
+    title: 'Project Management',
     description:
-      "Keep track of everyone's salaries and whether or not they've been paid. Direct deposit not supported.",
+      "Reduce communication breakdowns, improve team collaboration, and keep your projects on track with ease.",
     image: screenshotPayroll,
   },
   {
-    title: 'Claim expenses',
-    description:
-      "All of your receipts organized into one place, as long as you don't mind typing in the data by hand.",
+    title: 'Communicate, No Matter the Language',
+    description: 'Linkster bridges the communication gap with real-time chat featuring automatic translation. Ensure everyone is on the same page, regardless of language spoken.',
     image: screenshotExpenses,
   },
   {
-    title: 'VAT handling',
-    description:
-      "We only sell our software to companies who don't deal with VAT at all, so technically we do all the VAT stuff they need.",
-    image: screenshotVatReturns,
+    title: 'Grow Your Team, Not Your Software Costs',
+    description: "Don't let limited user licenses restrict your project growth. Linkster offers unlimited team members, so you can scale your workforce seamlessly without worrying about per-user fees",
+    image: screenshotExpenses,
   },
   {
-    title: 'Reporting',
-    description:
-      'Easily export your data into an Excel spreadsheet where you can do whatever the hell you want with it.',
+    title: 'Build Your Network, Build Your Business',
+    description: "Find trusted subcontractors, share resources, and grow your network - all within one platform.",
     image: screenshotReporting,
   },
   {
-    title: 'Reporting',
+    title: 'Gain Control of Your Client Pipeline',
     description:
-       'Easily export your data into an Excel spreadsheet where you can do whatever the hell you want with it.',
+      "Linkster's built-in CRM simplifies customer management, allowing you to focus on building relationships and closing deals.",
     image: screenshotReporting,
   },
 ]
@@ -82,10 +79,10 @@ export function PrimaryFeatures() {
       <Container className="relative">
         <div className="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
           <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
-            Everything you need to run your jobs.
+            Stop Wasting Time, Start Building More
           </h2>
           <p className="mt-6 text-lg tracking-tight text-blue-100">
-            We make it simple to schedule your jobs and manage your projects.
+            Manage projects, find subcontractors, and grow your network - all within Linkster.
           </p>
         </div>
         <Tab.Group
