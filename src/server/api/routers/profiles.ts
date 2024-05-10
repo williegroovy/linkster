@@ -110,7 +110,9 @@ export const profilesRouter = createTRPCRouter({
       .mutation(async ({ ctx, input }) => {
          let coords = null;
 
-         if(input.street && input.city && input.state && input.postalCode && input.country) {
+         const hasCompleteAddress = input.street && input.city && input.state && input.postalCode && input.country;
+
+         if(hasCompleteAddress) {
             const address = `${input.street} ${input.city} ${input.state} ${input.postalCode} ${input.country}`;
             coords = await getLatLong(address);
          }
@@ -120,13 +122,15 @@ export const profilesRouter = createTRPCRouter({
                data: {
                   profile: { connect: { id: ctx.session.user.profile.id } },
                   companyName: input.companyName,
-                  address: {
-                     street: input.street,
-                     city: input.city,
-                     state: input.state,
-                     postalCode: input.postalCode,
-                     country: input.country,
-                     ...coords && { coordinates: coords },
+                  ...hasCompleteAddress && {
+                     address: {
+                        street: input.street,
+                        city: input.city,
+                        state: input.state,
+                        postalCode: input.postalCode,
+                        country: input.country,
+                        ...coords && { coordinates: coords },
+                     }
                   },
                }
             })

@@ -1,6 +1,5 @@
 import clsx from 'clsx'
 
-import Link from 'next/link'
 import { Button } from '~/components/Button'
 import { Container } from '~/components/Container'
 import classNames from 'classnames';
@@ -111,7 +110,7 @@ function Plan({
               featured ? 'text-white' : 'text-slate-200',
            )}
         >
-          <p className={'text-lg'}>Upcoming Features</p>
+          <p className={'text-lg'}>Planned Features</p>
           {coming && coming.map((feature) => (
              <li key={feature} className="flex">
                <CheckIcon className={featured ? 'text-white' : 'text-slate-400'} />

@@ -100,7 +100,7 @@ export default function ProjectSlideout({ children, formData, formAction } : { c
                                        <div className="flex items-start justify-between space-x-3">
                                           <div className="space-y-1">
                                              <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                                                New project
+                                                { formData ? 'Project Information' : 'New project' }
                                              </Dialog.Title>
                                              {/*<p className="text-sm text-gray-500">*/}
                                              {/*   Get started by filling in the information below to create your new project.*/}
@@ -286,7 +286,6 @@ export default function ProjectSlideout({ children, formData, formAction } : { c
                                           { formData ? 'Save' : 'Create' }
                                        </button>
                                     </div>
-                                    { addSub && contractors && <TeamCombobox contractors={contractors} selected={[]} type={'subcontractor'} /> }
                                  </div>
                               </form>
                            </Dialog.Panel>

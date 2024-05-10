@@ -101,7 +101,7 @@ export function PrimaryFeatures() {
                         'group relative rounded-full px-4 py-1 lg:rounded-l-xl lg:rounded-r-none lg:p-6',
                         selectedIndex === featureIndex
                           ? 'bg-white lg:bg-white/10 lg:ring-1 lg:ring-inset lg:ring-white/10'
-                          : 'hover:bg-white/10 lg:hover:bg-white/5',
+                          : 'hover:bg-white/10 lg:hover:bg-white/8',
                       )}
                     >
                       <h3>

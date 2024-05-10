@@ -104,7 +104,7 @@ export function Header({ signedIn }: { signedIn: boolean }) {
       <Container>
         <nav className="relative z-50 flex justify-between">
           <div className="flex items-center md:gap-x-12">
-            <Link href="src/components#" aria-label="Home">
+            <Link href="/" aria-label="Home">
               <Image src="/images/linkster-logo.png" alt="Logo" width={132} height={40} />
               {/*<Logo className="h-10 w-auto" />*/}
             </Link>
