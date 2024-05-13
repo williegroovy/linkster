@@ -169,7 +169,7 @@ export function Pricing() {
           <Plan
             featured
             name="Connect Plus"
-            price="$50"
+            price="$9"
             href="/register"
             cta={'Sign up for 50% off a launch'}
             features={[
@@ -188,7 +188,7 @@ export function Pricing() {
           />
           <Plan
             name="Connect Pro"
-            price="$100"
+            price="$14"
             href="/register"
             cta={'Sign up for 50% off a launch'}
             features={[
