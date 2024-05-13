@@ -3,12 +3,7 @@
 import { useState } from 'react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { Combobox } from '@headlessui/react'
-import { useRouter } from 'next/navigation';
-import { api } from '~/trpc/react';
-
-function classNames(...classes: Array<string | boolean | undefined>) {
-   return classes.filter(Boolean).join(' ')
-}
+import classNames from 'classnames'
 
 type Contractor = {
    id: string,
@@ -35,77 +30,10 @@ type Contractor = {
 
 type Contractors = Array<Contractor>
 
-export default function ContractorList({ contractors, selected, type } : { contractors: Contractors, selected: Contractors, type?: 'team' | 'subcontractor' }) {
-   const router = useRouter();
+export default function TeamCombo({ contractors, selected, setSelected } : { contractors: Contractors, selected: Contractors, setSelected: (contractors: Contractors) => void }) {
    const [query, setQuery] = useState('')
-   const [selectedItems, setSelectedItems] = useState<Contractors>(selected)
 
-   const addTeamMember = api.team.addTeamMember.useMutation(
-      {
-         onSuccess: () => {
-            router.refresh();
-         }
-      }
-   );
-
-   const removeTeamMember = api.team.removeTeamMember.useMutation(
-      {
-         onSuccess: () => {
-            setSelectedItems([]);
-            router.refresh();
-         }
-      }
-   );
-
-   const addSubcontractor = api.team.addSubcontractor.useMutation(
-      {
-         onSuccess: () => {
-            router.refresh();
-         }
-      }
-   );
-
-   const removeSubcontractor = api.team.addSubcontractor.useMutation(
-      {
-         onSuccess: () => {
-            setSelectedItems([]);
-            router.refresh();
-         }
-      }
-   );
-
-
-   const handleOnChange = async (newItems: Contractors) => {
-      setSelectedItems(newItems);
-
-      const add = newItems?.filter((listItem) => {
-         return !selectedItems?.includes(listItem);
-      });
-
-      const remove = selectedItems?.filter((listItem) => {
-         return !newItems?.includes(listItem);
-      });
-
-      if(add && add.length > 0 && add[0]?.id) {
-         setQuery('');
-         if(type === 'team') {
-            await addTeamMember.mutateAsync({ contractorId: add[0].id });
-         } else {
-            await addSubcontractor.mutateAsync({ contractorId: add[0].id });
-         }
-
-      }
-
-      if(remove && remove.length > 0 && remove[0]?.id) {
-         if(type === 'team') {
-            await removeTeamMember.mutateAsync({ contractorId: remove[0].id });
-         } else {
-            await removeSubcontractor.mutateAsync({ contractorId: remove[0].id });
-
-         }
-      }
-   }
-
+   console.log('selected', selected);
    const filteredPeople =
       query === ''
          ? contractors
@@ -114,11 +42,9 @@ export default function ContractorList({ contractors, selected, type } : { contr
             return name.includes(query.toLowerCase())
          })
 
-
-
    return contractors && contractors.length > 0 && (
       // @ts-ignore
-      <Combobox as="div" by={'id'} value={selectedItems} onChange={handleOnChange} multiple>
+      <Combobox as="div" by={'id'} value={selected} onChange={setSelected} multiple>
          <div className="relative mt-2">
             <Combobox.Input
                className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -159,7 +85,7 @@ export default function ContractorList({ contractors, selected, type } : { contr
                                     )}
                                  >
                                     <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                 </span>
+                                  </span>
                               )}
                            </>
                         )}

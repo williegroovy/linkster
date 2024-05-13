@@ -20,6 +20,7 @@ export const teamRouter = createTRPCRouter({
                      select: {
                         firstName: true,
                         lastName: true,
+                        address: true,
                         user: {
                            select: {
                               email: true,
@@ -33,6 +34,38 @@ export const teamRouter = createTRPCRouter({
             },
          }
       });
+   }),
+   addTeamMembers: protectedProcedure.input(z.object({ teamIds: z.array(z.string().min(1)) })).mutation(async ({ ctx, input }) => {
+      return Promise.allSettled(input.teamIds.map(async (id) => {
+         return ctx.db.contractor.update({
+            where: {
+               id: ctx.session.user.profile.contractorProfile.id,
+            },
+            data: {
+               team: {
+                  connect: {
+                     id: id,
+                  }
+               }
+            }
+         });
+      }));
+   }),
+   removeTeamMembers: protectedProcedure.input(z.object({ teamIds: z.array(z.string().min(1)) })).mutation(async ({ ctx, input }) => {
+      return Promise.allSettled(input.teamIds.map(async (id) => {
+         return ctx.db.contractor.update({
+            where: {
+               id: ctx.session.user.profile.contractorProfile.id,
+            },
+            data: {
+               team: {
+                  disconnect: {
+                     id: id,
+                  }
+               }
+            }
+         });
+      }));
    }),
    addTeamMember: protectedProcedure.input(z.object({ contractorId: z.string().min(1) })).mutation(async ({ ctx, input }) => {
       return ctx.db.contractor.update({
@@ -130,6 +163,7 @@ export const teamRouter = createTRPCRouter({
                select: {
                   firstName: true,
                   lastName: true,
+                  address: true,
                   user: {
                      select: {
                         email: true,

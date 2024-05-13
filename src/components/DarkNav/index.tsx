@@ -2,6 +2,7 @@
 import { Fragment, type ReactNode } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import Link from 'next/link';
 
 const navigation = [
    { name: 'Dashboard', href: '/dashboard', current: true },
@@ -35,13 +36,13 @@ export default function DarkNav({ children, user } : { children: ReactNode, user
                      <div className="flex h-16 items-center justify-between">
                         <div className="flex items-center">
                            <div className="flex-shrink-0">
-                              <a href={'/'}>
+                              <Link href={'/'}>
                                  <img
                                     className="h-8 w-8"
-                                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                                    src="/images/linkster-icon.png"
                                     alt="Your Company"
                                  />
-                              </a>
+                              </Link>
                            </div>
                            <div className="hidden md:block">
                               <div className="ml-10 flex items-baseline space-x-4">

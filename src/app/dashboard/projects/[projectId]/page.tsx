@@ -21,13 +21,10 @@ export default async function ProjectPage({ params, searchParams } : { params: {
 
    const project = await api.projects.get({ projectId: params.projectId });
    const contractors = await api.projects.listContractors();
+   const teamMembers = project?.teamMembers ?? [];
    const trades = await api.trades.list();
 
-   const selected = project?.trades.map(({ trade }) => trade) ?? [];
-
    const isProjectOwner = project?.contractorId === serverSession?.user?.profile?.contractorProfile?.id;
-
-   const selectedSubs = project?.subContractors?.map(({ contractor }) => ({ id: contractor.id, profile: contractor.profile })) ?? []
    const initials = serverSession?.user.name.split(' ').map((n) => n[0]).join('');
 
    const createTrade = async function(tradeId: string, tasks: Array<{ description: string }> = []) {
@@ -43,7 +40,7 @@ export default async function ProjectPage({ params, searchParams } : { params: {
 
 
    const updateProject = async function(formData: FormData) {
-      'use server'
+      'use server';
 
       const name = formData.get('name') as string | null;
       const description = formData.get('description') as string | null;
@@ -52,8 +49,15 @@ export default async function ProjectPage({ params, searchParams } : { params: {
       const city = formData.get('city') as string | null;
       const state = formData.get('state') as string | null;
       const postalCode = formData.get('postalCode') as string | null;
+      const teamList = formData.get('team') as string | null;
+      const team = teamList?.split(',').map((id) => ({ id })) ?? [];
+
+
 
       if(name && description && country && address && city && state && postalCode) {
+         const addMembers = team?.filter((member) => !teamMembers.some((t) => t.id === member.id));
+         const removeMembers = teamMembers?.filter((member) => !team.some((t) => t.id === member.id));
+
          const projectUpdate = {
             projectId: params.projectId,
             name,
@@ -62,14 +66,15 @@ export default async function ProjectPage({ params, searchParams } : { params: {
             address,
             city,
             state,
-            postalCode
+            postalCode,
+            add: addMembers,
+            remove: removeMembers
          }
 
          await api.projects.update(projectUpdate);
 
          router.redirect(`/dashboard/projects/${params.projectId}`);
       }
-
    }
 
    return project && (
@@ -128,7 +133,7 @@ export default async function ProjectPage({ params, searchParams } : { params: {
                <PhotoSlideout projectId={project.id} images={project.images}>
                   <PhotoIcon className="h-8 w-8 flex-shrink-0 text-gray-600" aria-description={'project photos'} />
                </PhotoSlideout>
-               <ProjectSlideout formAction={updateProject} formData={project}>
+               <ProjectSlideout formAction={updateProject} formData={project} team={teamMembers} contractors={contractors}>
                   <PencilIcon className="h-8 w-8 flex-shrink-0 text-gray-600" aria-hidden="true" />
                </ProjectSlideout>
                <DeleteConfirmation id={project.id} name={'Project'} onDelete={onDeleteProject}>
@@ -151,7 +156,7 @@ export default async function ProjectPage({ params, searchParams } : { params: {
                      {/*<AddTrade projectId={project.id} isProjectOwner={isProjectOwner} />*/}
                   </span>
                   <span className="ml-3 hidden md:block">
-                     <ProjectSlideout formAction={updateProject} formData={project}>
+                     <ProjectSlideout formAction={updateProject} formData={project} team={teamMembers} contractors={contractors}>
                         <button
                            type="button"
                            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"

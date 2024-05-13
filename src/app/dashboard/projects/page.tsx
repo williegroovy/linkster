@@ -187,6 +187,7 @@ export default async function ProjectsPage() {
    const serverSession = await getServerAuthSession();
    const projects = await api.projects.list();
    const contractor = await api.projects.listSubcontractorProjects();
+   const contractors = await api.projects.listContractors();
 
    const initials = serverSession?.user.name.split(' ').map((n) => n[0]).join('');
 
@@ -221,7 +222,6 @@ export default async function ProjectsPage() {
          const newProject = await api.projects.create(projectUpdate);
          router.redirect(`/dashboard/projects/${newProject.id}`);
       }
-
    }
 
    return (
@@ -233,21 +233,20 @@ export default async function ProjectsPage() {
                      <h1 className="text-base font-semibold leading-7 text-gray-900">Projects</h1>
                   </div>
                   <div className="flex flex-wrap items-center sm:flex-nowrap">
-                     <ProjectSlideout formAction={createProject} >
+                     <ProjectSlideout formAction={createProject} team={[]} contractors={contractors}>
                         <button
                            className="ml-auto flex items-center gap-x-1 rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
                            New project
                         </button>
                      </ProjectSlideout>
-
                   </div>
                </>
             )}
          </DarkNavHeader>
          <DarkNavContainer>
             <div className={'md:hidden'}>
-               <ProjectSlideout formAction={createProject} >
+               <ProjectSlideout formAction={createProject} team={[]} contractors={contractors}>
                   <button className="fixed bottom-4 right-4 rounded-full bg-indigo-600 p-4 text-white">
                      <PlusIcon className="h-6 w-6" />
                   </button>
@@ -317,42 +316,6 @@ export default async function ProjectsPage() {
                      ))}
                   </ul>
                </div>
-               // <div className={'px-4 sm:px-6 lg:px-8'}>
-               //    <div className={'md:mt-10'}>
-               //       <h2 className="text-base font-semibold leading-7 text-gray-900">My Projects</h2>
-               //       <ul role="list" className="divide-y divide-gray-100">
-               //          {projects.map((project) => (
-               //             <li key={project.id} className="flex items-center justify-between gap-x-6 py-5">
-               //                <div className="min-w-0">
-               //                   <div className="flex items-start gap-x-3">
-               //                      <p className="text-sm font-semibold leading-6 text-gray-900">{project.name}</p>
-               //                   </div>
-               //                   <div className="mt-1 flex flex-col md:flex-row md:items-center gap-y-2 md:gap-x-2 text-xs md:leading-5 text-gray-500">
-               //                      <p>
-               //                         {project.description}
-               //                      </p>
-               //                      <svg viewBox="0 0 2 2" className="hidden h-0.5 w-0.5 fill-current md:block">
-               //                         <circle cx={1} cy={1} r={1} />
-               //                      </svg>
-               //                      <p className="whitespace-nowrap">
-               //                         {project?.address?.street}, {project?.address?.city}, {project?.address?.state} {project?.address?.postalCode}
-               //                      </p>
-               //                   </div>
-               //                </div>
-               //                <div className="flex flex-none items-center gap-x-4">
-               //                   <Link
-               //                      href={`/dashboard/projects/${project.id}`}
-               //                      className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
-               //                   >
-               //                      Manage<span className="sr-only">, {project.name}</span>
-               //                   </Link>
-               //                   <ProjectMenu projectName={project.name} projectId={project.id} deleteProject={onDeleteProject} />
-               //                </div>
-               //             </li>
-               //          ))}
-               //       </ul>
-               //    </div>
-               // </div>
                ) : (
                <div className="h-[50vh] flex flex-col justify-center text-center">
                   <svg

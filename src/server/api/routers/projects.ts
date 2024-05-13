@@ -55,6 +55,9 @@ export const projectsRouter = createTRPCRouter({
          state: z.string().min(1),
          postalCode: z.string().min(1),
          country: z.string().min(1),
+         add: z.array(z.object({ id: z.string() })),
+         remove: z.array(z.object({ id: z.string() })),
+
       }))
       .mutation(async ({ ctx, input }) => {
          const fullAddress = `${input.address}, ${input.city}, ${input.state}, ${input.postalCode}, ${input.country}`;
@@ -75,7 +78,15 @@ export const projectsRouter = createTRPCRouter({
                   country: input.country,
                   coordinates: coords
                },
-               contractor: { connect: { id: ctx.session.user.profile.contractorProfile.id } },
+               teamMembers: {
+                  create: {
+                     contractor: {
+                        connect: {
+                           id: ctx.session.user.profile.contractorProfile.id,
+                        },
+                     },
+                  },
+               }
             },
          });
       }),
@@ -123,6 +134,29 @@ export const projectsRouter = createTRPCRouter({
                   url: true
                }
             },
+            teamMembers: {
+               include: {
+                  contractor: {
+                     select: {
+                        id: true,
+                        profile: {
+                           select: {
+                              userId: true,
+                              firstName: true,
+                              lastName: true,
+                              address: true,
+                              user: {
+                                 select: {
+                                    email: true,
+                                    image: true
+                                 }
+                              },
+                           },
+                        },
+                     }
+                  },
+               }
+            },
             subContractors: {
                include: {
                   contractor: {
@@ -158,25 +192,23 @@ export const projectsRouter = createTRPCRouter({
          where: {
             id: {
                not: ctx.session.user.profile.contractorProfile.id,
-            },
-            NOT: {
-               profile: null
             }
          },
          select: {
             id: true,
             profile: {
                select: {
-                  userId: true,
                   firstName: true,
                   lastName: true,
+                  address: true,
                   user: {
                      select: {
                         email: true,
-                        image: true
+                        id: true,
+                        image: true,
                      }
-                  },
-               },
+                  }
+               }
             },
          }
       });
